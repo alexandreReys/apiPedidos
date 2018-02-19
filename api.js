@@ -6,12 +6,17 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 app.use(cors())
 
+var db_host = process.env.db_host
+var db_user = process.env.db_user
+var db_pass = process.env.db_pass
+var db_data = process.env.db_data
+
 var connection = mysql.createPool({
   connectionLimit : 10,
-  host     : '200.170.88.136',
-  user     : 'anrsiste7818',
-  password : '34ob47DR*',
-  database : "anrsistemas3"
+  host     : db_host,
+  user     : db_user,
+  password : db_pass,
+  database : db_data
 });
 
 app.get('/itensmesa/:nummesa', (req, res) => {
