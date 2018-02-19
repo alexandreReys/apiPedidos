@@ -3,9 +3,9 @@
     "displayName": "anr-api-pedidos",
     "version": "1.0.0",
     "description": "API / MYSql integrado com appPedidos Android",
-    "main": "app.js",
+    "main": "api.js",
   	"scripts": {
-    	"start": "node app"
+    	"start": "node api"
   	},
     "author": "Alexandre Nunes Reys",
     "license": "Apache-2.0"
