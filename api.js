@@ -28,18 +28,30 @@ app.get('/itensmesa/:nummesa', (req, res) => {
 })
 
 app.get('/cadpro/:codpro', (req, res) => {
-  var sql = 'select * from CadproNet where CadproNetCodigo = ?'
-  connection.query(sql, [req.params.codpro], function(err, rows, fields) {
-    if (err) throw err;
-    res.json(rows[0])
-  });
+    var sql = 
+      'SELECT p1.Cadpro1NetLoja, p1.Cadpro1NetCodigo, ' +
+          'p.CadproNetDescricao, p1.Cadpro1NetPreco ' +
+      'FROM Cadpro1Net p1 ' +
+      'INNER JOIN CadproNet p  ' +
+          'ON ( p.CadproNetCodigo = p1.Cadpro1NetCodigo ) ' +
+          'AND ( p.CadproNetLoja = p1.Cadpro1NetLoja ) ' +
+      'WHERE ( p1.Cadpro1NetCodigo = ? )'
+/*
+    var sql = 
+    'select * from CadproNet where CadproNetCodigo = ?'
+*/
+    connection.query(sql, [req.params.codpro], function(err, rows, fields) {
+        if (err) throw err;
+        res.json(rows[0])
+    });
 })
 
 app.post('/cadpro', (req, res) => {
   var par = req.body
   var sql = 
     'insert into appPed ' + 
-    '(PedMesaComanda, PedCodProduto, PedDescricaoProduto, PedEmbalagem, PedQtdePorEmbalagem, PedUnidadeEmbalagem, PedQtde, PedValorUnitario, PedValorTotal) '+
+      '(PedMesaComanda, PedCodProduto, PedDescricaoProduto, PedEmbalagem, PedQtdePorEmbalagem, ' +
+      'PedUnidadeEmbalagem, PedQtde, PedValorUnitario, PedValorTotal) '+
     'values (?, ?, ?, ?, ?, ?, ?, ?, ?)'
   connection.query( 
     sql, 
