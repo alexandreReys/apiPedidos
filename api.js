@@ -27,6 +27,14 @@ app.get('/itensmesa/:nummesa', (req, res) => {
   });
 })
 
+app.get('/cadproTipos', (req, res) => {
+  var sql = 'select * from Class2Net'
+  connection.query(sql, [req.params.nummesa], function(err, rows, fields) {
+    if (err) throw err;
+    res.json(rows)
+  });
+})
+
 app.get('/cadpro/:codpro', (req, res) => {
     var sql = 
       'SELECT p1.Cadpro1NetLoja, p1.Cadpro1NetCodigo, ' +
