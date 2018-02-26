@@ -27,7 +27,7 @@ app.get('/itensmesa/:nummesa', (req, res) => {
   });
 })
 
-app.get('/cadproTipos', (req, res) => {
+app.get('/tiposCadpro', (req, res) => {
   var sql = 'select * from Class2Net'
   connection.query(sql, [req.params.nummesa], function(err, rows, fields) {
     if (err) throw err;
@@ -36,21 +36,47 @@ app.get('/cadproTipos', (req, res) => {
 })
 
 app.get('/cadpro/:codpro', (req, res) => {
+  var sql = 
+    'SELECT p1.Cadpro1NetLoja, p1.Cadpro1NetCodigo, ' +
+        'p.CadproNetDescricao, p1.Cadpro1NetPreco ' +
+    'FROM Cadpro1Net p1 ' +
+    'INNER JOIN CadproNet p  ' +
+        'ON ( p.CadproNetCodigo = p1.Cadpro1NetCodigo ) ' +
+        'AND ( p.CadproNetLoja = p1.Cadpro1NetLoja ) ' +
+    'WHERE ( p1.Cadpro1NetCodigo = ? )'
+  connection.query(sql, [req.params.codpro], function(err, rows, fields) {
+      if (err) throw err;
+      res.json(rows[0])
+  });
+})
+
+app.get('/cadproporid/:id', (req, res) => {
+  var sql = 
+    'SELECT p1.Cadpro1NetLoja, p1.Cadpro1NetCodigo, ' +
+    'p.CadproNetId, p.CadproNetDescricao, p1.Cadpro1NetPreco ' +
+    'FROM Cadpro1Net p1 ' +
+    'INNER JOIN CadproNet p  ' +
+        'ON ( p.CadproNetCodigo = p1.Cadpro1NetCodigo ) ' +
+        'AND ( p.CadproNetLoja = p1.Cadpro1NetLoja ) ' +
+    'WHERE ( p.CadproNetId = ? )'
+  connection.query(sql, [req.params.id], function(err, rows, fields) {
+      if (err) throw err;
+      res.json(rows[0])
+  });
+})
+
+app.get('/cadproportipo/:tipo', (req, res) => {
     var sql = 
-      'SELECT p1.Cadpro1NetLoja, p1.Cadpro1NetCodigo, ' +
-          'p.CadproNetDescricao, p1.Cadpro1NetPreco ' +
-      'FROM Cadpro1Net p1 ' +
-      'INNER JOIN CadproNet p  ' +
-          'ON ( p.CadproNetCodigo = p1.Cadpro1NetCodigo ) ' +
-          'AND ( p.CadproNetLoja = p1.Cadpro1NetLoja ) ' +
-      'WHERE ( p1.Cadpro1NetCodigo = ? )'
-/*
-    var sql = 
-    'select * from CadproNet where CadproNetCodigo = ?'
-*/
-    connection.query(sql, [req.params.codpro], function(err, rows, fields) {
+        'SELECT p1.Cadpro1NetLoja, p.CadproNetClass2, p1.Cadpro1NetCodigo, '+
+        'p.CadproNetDescricao, p1.Cadpro1NetPreco, p.CadproNetId '+
+        'FROM Cadpro1Net p1 '+
+        'INNER JOIN CadproNet p '+
+        'ON ( p.CadproNetCodigo = p1.Cadpro1NetCodigo ) '+
+        'AND ( p.CadproNetLoja = p1.Cadpro1NetLoja ) '+
+        'WHERE ( p.CadproNetClass2 = ? ) '
+    connection.query(sql, [req.params.tipo], function(err, rows, fields) {
         if (err) throw err;
-        res.json(rows[0])
+        res.json(rows)
     });
 })
 
