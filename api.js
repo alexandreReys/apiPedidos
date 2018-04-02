@@ -133,4 +133,26 @@ app.put('/itensmesa', (req, res) => {
     });
 })
 
+/*
+//////////////////////////////////////////////////////////////////////////////////////////
+Controle de Serviços e Vistorias
+//////////////////////////////////////////////////////////////////////////////////////////
+*/
+
+app.get('/api/v1/clientes', (req, res) => {
+  var sql = 'select * from csvCliente'
+  connection.query(sql, [req.params.nummesa], function(err, rows, fields) {
+    if (err) throw err;
+    res.json(rows)
+  });
+})
+
+app.get('/api/v1/clienteLocais/:id', (req, res) => {
+  connection.query('select * from csvClienteLocal where csvCliLocIdCliente = ?',[req.params.id], function(err, rows, fields) {
+    if (err) throw err;
+    res.json(rows)
+  });
+})
+
 app.listen(3000, () => console.log('API rodando na porta 3000') )
+
