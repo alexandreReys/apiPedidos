@@ -148,11 +148,76 @@ app.get('/api/v1/clientes', (req, res) => {
 })
 
 app.get('/api/v1/clienteLocais/:id', (req, res) => {
-  connection.query('select * from csvClienteLocal where csvCliLocIdCliente = ?',[req.params.id], function(err, rows, fields) {
-    if (err) throw err;
+  connection.query('select * from csvClienteLocal where csvCliLocIdCliente = ?',[req.params.id], 
+    function(err, rows, fields) {
+      if (err) throw err;
+      res.json(rows)
+    }
+  );
+})
+
+app.get('/api/v1/clienteLocaisUnid/:idCliente/:idLocal', (req, res) => {
+  let sql = 'select * ' +
+            'from csvClienteLocalUnid ' +
+            'where ( csvCliLocUniIdCliente = ? ) and ( csvCliLocUniIdClienteLocal = ? )';
+  connection.query(sql, [req.params.idCliente, req.params.idLocal], 
+    function(err, rows, fields) {
+      if (err) throw err;
+    res.json(rows)
+  });
+})
+
+app.get('/api/v1/Checklist/:idCliente/:idLocal/:idUnidade', (req, res) => {
+  let sql = 
+    'SELECT csvChkId, csvChkIdCliente, csvChkIdClienteLocal, csvChkIdClienteLocalUnid, ' +
+    '  csvChkDescricao, csvCliLocDescricao, csvCliLocUniDescricao ' +
+    'FROM csvChecklist ' +
+    'LEFT JOIN csvClienteLocal ' +
+    '      ON  (csvChkIdCliente      = csvCliLocIdCliente)  ' +
+    '      AND (csvChkIdClienteLocal = csvCliLocId) ' +
+    'LEFT JOIN csvClienteLocalUnid ' +
+    '      ON  (csvChkIdCliente          = csvCliLocUniIdCliente) ' +
+    '      AND (csvChkIdClienteLocal     = csvCliLocUniIdClienteLocal) ' +
+    '      AND (csvChkIdClienteLocalUnid = csvCliLocUniId) ' +
+    'WHERE (csvChkIdCliente = ?) ' +
+    '  AND (csvChkIdClienteLocal = ?) ' +
+    '  AND (csvChkIdClienteLocalUnid = ?) ' +
+    'ORDER BY csvChkId';
+  connection.query(sql, [req.params.idCliente, req.params.idLocal, req.params.idUnidade], 
+    function(err, rows, fields) {
+      if (err) throw err;
+    res.json(rows)
+  });
+})
+
+app.get('/api/v1/ChecklistItem/:idCliente/:idLocal/:idUnidade/:idChecklist', (req, res) => {
+  let sql = 
+    'SELECT csvChkItemId, csvChkItemIdCliente, csvChkItemIdLocal, ' +
+    '  csvChkItemIdUnidade, csvChkItemIdChecklist, csvChkItemDescricao,  ' +
+    '  csvCliLocDescricao, csvCliLocUniDescricao, csvChkDescricao ' +
+    'FROM csvChecklistItem ' +
+    'LEFT JOIN csvClienteLocal ' +
+    '      ON  (csvChkItemIdCliente = csvCliLocIdCliente)  ' +
+    '      AND (csvChkItemIdLocal   = csvCliLocId) ' +
+    'LEFT JOIN csvClienteLocalUnid ' +
+    '      ON  (csvChkItemIdCliente = csvCliLocUniIdCliente) ' +
+    '      AND (csvChkItemIdLocal   = csvCliLocUniIdClienteLocal) ' +
+    '      AND (csvChkItemIdUnidade = csvCliLocUniId) ' +
+    'LEFT JOIN csvChecklist ' +
+    '      ON  (csvChkItemIdCliente   = csvChkIdCliente) ' +
+    '      AND (csvChkItemIdLocal     = csvChkIdClienteLocal) ' +
+    '      AND (csvChkItemIdUnidade   = csvChkIdClienteLocalUnid) ' +
+    '      AND (csvChkItemIdChecklist = csvChkId) ' +
+    'WHERE (csvChkItemIdCliente = ?) ' +
+    '  AND (csvChkItemIdLocal = ?) ' +
+    '  AND (csvChkItemIdUnidade = ?) ' +
+    '  AND (csvChkItemIdChecklist = ?) ' +
+    'ORDER BY csvChkItemId';
+  connection.query(sql, [req.params.idCliente, req.params.idLocal, req.params.idUnidade, req.params.idChecklist], 
+    function(err, rows, fields) {
+      if (err) throw err;
     res.json(rows)
   });
 })
 
 app.listen(3000, () => console.log('API rodando na porta 3000') )
-
