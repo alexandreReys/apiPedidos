@@ -237,16 +237,18 @@ app.post('/api/v1/vistoria', (req, res) => {
 		var usuario = req.body
 
 		var sql  = 'insert into csvVistoria(';
-	        sql += '  csvVisIdCliente,   csvVisIdLocal,';
+	        sql += '  csvVisUsuario,    csvVisData,    	   csvVisHora,';
+	        sql += '  csvVisIdCliente,  csvVisIdLocal,';
             sql += '  csvVisIdUnidade,  csvVisIdChecklist, csvVisIdItem,';
             sql += '  csvVisStatus,     csvVisOcorrencia,  csvVisImagem01,';
             sql += '  csvVisImagem02,   csvVisImagem03,    csvVisImagem04,';
 	        sql += '  csvVisImagem05,   csvVisImagem06,    csvVisImagem07,';
             sql += '  csvVisImagem08,   csvVisImagem09,    csvVisImagem10';
 	        sql += ') ';
-	        sql += 'value ( ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )';
+	        sql += 'value ( ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )';
 
 		connection.query(sql, [
+            usuario.csvVistoriaUsuario,    usuario.csvVistoriaData,        usuario.csvVistoriaHora,
             usuario.csvVistoriaIdCliente,  usuario.csvVistoriaIdLocal,
             usuario.csvVistoriaIdUnidade,  usuario.csvVistoriaIdChecklist, usuario.csvVistoriaIdItem,
             usuario.csvVistoriaStatus,     usuario.csvVistoriaOcorrencia,  usuario.csvVistoriaImagem01,
