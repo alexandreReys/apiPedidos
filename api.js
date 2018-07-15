@@ -104,10 +104,6 @@ app.delete('/itensmesa/:id', (req, res) => {
 	});
 })
 
-/*
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
-*/
-
 app.get('/itensmesa/:id', (req, res) => {
 	connection.query('select * from contatos where id = ?',[req.params.id], function(err, rows, fields) {
 		if (err) throw err;
@@ -197,21 +193,21 @@ app.get('/api/v1/ChecklistItem/:idCliente/:idLocal/:idUnidade/:idChecklist', (re
 		'  csvCliLocDescricao, csvCliLocUniDescricao, csvChkDescricao ' +
 		'FROM csvChecklistItem ' +
 		'LEFT JOIN csvClienteLocal ' +
-		'      ON  (csvChkItemIdCliente = csvCliLocIdCliente)  ' +
-		'      AND (csvChkItemIdLocal   = csvCliLocId) ' +
+		'       ON  (csvChkItemIdCliente = csvCliLocIdCliente)  ' +
+		'       AND (csvChkItemIdLocal   = csvCliLocId) ' +
 		'LEFT JOIN csvClienteLocalUnid ' +
-		'      ON  (csvChkItemIdCliente = csvCliLocUniIdCliente) ' +
-		'      AND (csvChkItemIdLocal   = csvCliLocUniIdClienteLocal) ' +
-		'      AND (csvChkItemIdUnidade = csvCliLocUniId) ' +
+		'       ON  (csvChkItemIdCliente = csvCliLocUniIdCliente) ' +
+		'       AND (csvChkItemIdLocal   = csvCliLocUniIdClienteLocal) ' +
+		'       AND (csvChkItemIdUnidade = csvCliLocUniId) ' +
 		'LEFT JOIN csvChecklist ' +
-		'      ON  (csvChkItemIdCliente   = csvChkIdCliente) ' +
-		'      AND (csvChkItemIdLocal     = csvChkIdClienteLocal) ' +
-		'      AND (csvChkItemIdUnidade   = csvChkIdClienteLocalUnid) ' +
-		'      AND (csvChkItemIdChecklist = csvChkId) ' +
+		'   	ON  (csvChkItemIdCliente   = csvChkIdCliente) ' +
+		'   	AND (csvChkItemIdLocal     = csvChkIdClienteLocal) ' +
+		'   	AND (csvChkItemIdUnidade   = csvChkIdClienteLocalUnid) ' +
+		'   	AND (csvChkItemIdChecklist = csvChkId) ' +
 		'WHERE (csvChkItemIdCliente = ?) ' +
-		'  AND (csvChkItemIdLocal = ?) ' +
-		'  AND (csvChkItemIdUnidade = ?) ' +
-		'  AND (csvChkItemIdChecklist = ?) ' +
+		'	AND (csvChkItemIdLocal = ?) ' +
+		'  	AND (csvChkItemIdUnidade = ?) ' +
+		'  	AND (csvChkItemIdChecklist = ?) ' +
 		'ORDER BY csvChkItemId';
 	connection.query(sql, [req.params.idCliente, req.params.idLocal, req.params.idUnidade, req.params.idChecklist], 
 		function(err, rows, fields) {
@@ -234,20 +230,20 @@ app.get('/api/v1/usuario/:usuario/:senha', (req, res) => {
 })
 
 app.post('/api/v1/vistoria', (req, res) => {
-		var usuario = req.body
+	var usuario = req.body
 
-		var sql  = 'insert into csvVistoria(';
-	        sql += '  csvVisUsuario,    csvVisData,    	   csvVisHora,';
-	        sql += '  csvVisIdCliente,  csvVisIdLocal,';
-            sql += '  csvVisIdUnidade,  csvVisIdChecklist, csvVisIdItem,';
-            sql += '  csvVisStatus,     csvVisOcorrencia,  csvVisImagem01,';
-            sql += '  csvVisImagem02,   csvVisImagem03,    csvVisImagem04,';
-	        sql += '  csvVisImagem05,   csvVisImagem06,    csvVisImagem07,';
-            sql += '  csvVisImagem08,   csvVisImagem09,    csvVisImagem10';
-	        sql += ') ';
-	        sql += 'value ( ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )';
+	var sql  = 'insert into csvVistoria(';
+        sql += '  csvVisUsuario,    csvVisData,    	   csvVisHora,';
+        sql += '  csvVisIdCliente,  csvVisIdLocal,';
+        sql += '  csvVisIdUnidade,  csvVisIdChecklist, csvVisIdItem,';
+        sql += '  csvVisStatus,     csvVisOcorrencia,  csvVisImagem01,';
+        sql += '  csvVisImagem02,   csvVisImagem03,    csvVisImagem04,';
+        sql += '  csvVisImagem05,   csvVisImagem06,    csvVisImagem07,';
+        sql += '  csvVisImagem08,   csvVisImagem09,    csvVisImagem10';
+        sql += ') ';
+        sql += 'value ( ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )';
 
-		connection.query(sql, [
+	connection.query(sql, [
             usuario.csvVistoriaUsuario,    usuario.csvVistoriaData,        usuario.csvVistoriaHora,
             usuario.csvVistoriaIdCliente,  usuario.csvVistoriaIdLocal,
             usuario.csvVistoriaIdUnidade,  usuario.csvVistoriaIdChecklist, usuario.csvVistoriaIdItem,
@@ -255,10 +251,45 @@ app.post('/api/v1/vistoria', (req, res) => {
             usuario.csvVistoriaImagem02,   usuario.csvVistoriaImagem03,    usuario.csvVistoriaImagem04,
             usuario.csvVistoriaImagem05,   usuario.csvVistoriaImagem06,    usuario.csvVistoriaImagem07,
             usuario.csvVistoriaImagem08,   usuario.csvVistoriaImagem09,    usuario.csvVistoriaImagem10
-        ], function(err, rows, fields) {
+        ], 
+        function(err, rows, fields) {
 			if (err) throw err;
 			res.json(rows)
-		});
+		}
+	);
+})
+
+app.get('/api/v1/vistoriaspordata', (req, res) => {
+	let sql = 
+		'SELECT csvVisId, csvVisUsuario, csvVisData, csvVisHora, csvVisIdCliente, csvVisIdLocal, ' + 
+		       'csvVisIdUnidade, csvVisIdChecklist, csvVisIdItem, csvVisStatus, csvVisOcorrencia, ' +
+		       'csvCliLocDescricao, csvCliLocUniDescricao, csvChkDescricao, csvChkItemDescricao, ' +
+		       'csvVisImagem01 ' +
+		'FROM csvVistoria ' +
+		'LEFT JOIN csvClienteLocal ' +
+		'  ON  (csvVisIdCliente = csvCliLocIdCliente)  ' +
+		'  AND (csvVisIdLocal   = csvCliLocId) ' +
+		'LEFT JOIN csvClienteLocalUnid ' +
+		'  ON  (csvVisIdCliente = csvCliLocUniIdCliente) ' +
+		'  AND (csvVisIdLocal   = csvCliLocUniIdClienteLocal) ' +
+		'  AND (csvVisIdUnidade = csvCliLocUniId) ' +
+		'LEFT JOIN csvChecklist ' +
+		'  ON  (csvVisIdCliente   = csvChkIdCliente) ' +
+		'  AND (csvVisIdLocal     = csvChkIdClienteLocal) ' +
+		'  AND (csvVisIdUnidade   = csvChkIdClienteLocalUnid) ' +
+		'  AND (csvVisIdChecklist = csvChkId) ' +
+		'LEFT JOIN csvChecklistItem ' +
+		'  ON  (csvVisIdCliente   = csvChkItemIdCliente) ' +
+		'  AND (csvVisIdLocal     = csvChkItemIdLocal) ' +
+		'  AND (csvVisIdUnidade   = csvChkItemIdUnidade) ' +
+		'  AND (csvVisIdChecklist = csvChkItemIdChecklist) ' +
+		'  AND (csvVisIdItem      = csvChkItemId)';
+connection.query(sql, [], 
+		function(err, rows, fields) {
+			if (err) throw err;
+			res.json(rows)
+		}
+	);
 })
 
 
