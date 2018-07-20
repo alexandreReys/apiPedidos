@@ -259,32 +259,34 @@ app.post('/api/v1/vistoria', (req, res) => {
 	);
 })
 
-app.get('/api/v1/vistoriaspordata', (req, res) => {
+app.get('/api/v1/vistoriaspordata/:data', (req, res) => {
 	let sql = 
 		'SELECT csvVisId, csvVisUsuario, csvVisData, csvVisHora, csvVisIdCliente, csvVisIdLocal, ' + 
 		       'csvVisIdUnidade, csvVisIdChecklist, csvVisIdItem, csvVisStatus, csvVisOcorrencia, ' +
 		       'csvCliLocDescricao, csvCliLocUniDescricao, csvChkDescricao, csvChkItemDescricao, ' +
 		       'csvVisImagem01 ' +
 		'FROM csvVistoria ' +
-		'LEFT JOIN csvClienteLocal ' +
-		'  ON  (csvVisIdCliente = csvCliLocIdCliente)  ' +
-		'  AND (csvVisIdLocal   = csvCliLocId) ' +
-		'LEFT JOIN csvClienteLocalUnid ' +
-		'  ON  (csvVisIdCliente = csvCliLocUniIdCliente) ' +
-		'  AND (csvVisIdLocal   = csvCliLocUniIdClienteLocal) ' +
-		'  AND (csvVisIdUnidade = csvCliLocUniId) ' +
-		'LEFT JOIN csvChecklist ' +
-		'  ON  (csvVisIdCliente   = csvChkIdCliente) ' +
-		'  AND (csvVisIdLocal     = csvChkIdClienteLocal) ' +
-		'  AND (csvVisIdUnidade   = csvChkIdClienteLocalUnid) ' +
-		'  AND (csvVisIdChecklist = csvChkId) ' +
-		'LEFT JOIN csvChecklistItem ' +
-		'  ON  (csvVisIdCliente   = csvChkItemIdCliente) ' +
-		'  AND (csvVisIdLocal     = csvChkItemIdLocal) ' +
-		'  AND (csvVisIdUnidade   = csvChkItemIdUnidade) ' +
-		'  AND (csvVisIdChecklist = csvChkItemIdChecklist) ' +
-		'  AND (csvVisIdItem      = csvChkItemId)';
-connection.query(sql, [], 
+			'LEFT JOIN csvClienteLocal ' +
+				'ON  (csvVisIdCliente = csvCliLocIdCliente)  ' +
+				'AND (csvVisIdLocal   = csvCliLocId) ' +
+			'LEFT JOIN csvClienteLocalUnid ' +
+				'ON  (csvVisIdCliente = csvCliLocUniIdCliente) ' +
+				'AND (csvVisIdLocal   = csvCliLocUniIdClienteLocal) ' +
+				'AND (csvVisIdUnidade = csvCliLocUniId) ' +
+			'LEFT JOIN csvChecklist ' +
+				'ON  (csvVisIdCliente   = csvChkIdCliente) ' +
+				'AND (csvVisIdLocal     = csvChkIdClienteLocal) ' +
+				'AND (csvVisIdUnidade   = csvChkIdClienteLocalUnid) ' +
+				'AND (csvVisIdChecklist = csvChkId) ' +
+			'LEFT JOIN csvChecklistItem ' +
+				'ON  (csvVisIdCliente   = csvChkItemIdCliente) ' +
+				'AND (csvVisIdLocal     = csvChkItemIdLocal) ' +
+				'AND (csvVisIdUnidade   = csvChkItemIdUnidade) ' +
+				'AND (csvVisIdChecklist = csvChkItemIdChecklist) ' +
+				'AND (csvVisIdItem      = csvChkItemId) ' +
+		'WHERE (csvVisData = ?)';
+
+connection.query(sql, [req.params.data], 
 		function(err, rows, fields) {
 			if (err) throw err;
 			res.json(rows)
