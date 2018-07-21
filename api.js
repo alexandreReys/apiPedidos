@@ -264,7 +264,7 @@ app.get('/api/v1/vistoriaspordata/:data', (req, res) => {
 		'SELECT csvVisId, csvVisUsuario, csvVisData, csvVisHora, csvVisIdCliente, csvVisIdLocal, ' + 
 		       'csvVisIdUnidade, csvVisIdChecklist, csvVisIdItem, csvVisStatus, csvVisOcorrencia, ' +
 		       'csvCliLocDescricao, csvCliLocUniDescricao, csvChkDescricao, csvChkItemDescricao, ' +
-		       'csvVisImagem01 ' +
+		       'csvVisImagem01, csvVisImagem02, csvVisImagem03, csvVisImagem04 ' +
 		'FROM csvVistoria ' +
 			'LEFT JOIN csvClienteLocal ' +
 				'ON  (csvVisIdCliente = csvCliLocIdCliente)  ' +
