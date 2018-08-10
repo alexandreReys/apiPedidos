@@ -19,6 +19,12 @@ var connection = mysql.createPool({
 	database : db_data
 });
 
+/*
+//////////////////////////////////////////////////////////////////////////////////////////
+Controle de Mesas / Pedidos
+//////////////////////////////////////////////////////////////////////////////////////////
+*/
+
 app.get('/itensmesa/:nummesa', (req, res) => {
 	var sql = 'select * from appPed where PedMesaComanda = ?'
 	connection.query(sql, [req.params.nummesa], function(err, rows, fields) {
@@ -66,18 +72,18 @@ app.get('/cadproporid/:id', (req, res) => {
 })
 
 app.get('/cadproportipo/:tipo', (req, res) => {
-		var sql = 
-				'SELECT p1.Cadpro1NetLoja, p.CadproNetClass2, p1.Cadpro1NetCodigo, '+
-				'p.CadproNetDescricao, p1.Cadpro1NetPreco, p.CadproNetId '+
-				'FROM Cadpro1Net p1 '+
-				'INNER JOIN CadproNet p '+
-				'ON ( p.CadproNetCodigo = p1.Cadpro1NetCodigo ) '+
-				'AND ( p.CadproNetLoja = p1.Cadpro1NetLoja ) '+
-				'WHERE ( p.CadproNetClass2 = ? ) '
-		connection.query(sql, [req.params.tipo], function(err, rows, fields) {
-				if (err) throw err;
-				res.json(rows)
-		});
+	var sql = 
+			'SELECT p1.Cadpro1NetLoja, p.CadproNetClass2, p1.Cadpro1NetCodigo, '+
+			'p.CadproNetDescricao, p1.Cadpro1NetPreco, p.CadproNetId '+
+			'FROM Cadpro1Net p1 '+
+			'INNER JOIN CadproNet p '+
+			'ON ( p.CadproNetCodigo = p1.Cadpro1NetCodigo ) '+
+			'AND ( p.CadproNetLoja = p1.Cadpro1NetLoja ) '+
+			'WHERE ( p.CadproNetClass2 = ? ) '
+	connection.query(sql, [req.params.tipo], function(err, rows, fields) {
+			if (err) throw err;
+			res.json(rows)
+	});
 })
 
 app.post('/cadpro', (req, res) => {
@@ -104,30 +110,37 @@ app.delete('/itensmesa/:id', (req, res) => {
 	});
 })
 
-app.get('/itensmesa/:id', (req, res) => {
-	connection.query('select * from contatos where id = ?',[req.params.id], function(err, rows, fields) {
-		if (err) throw err;
-		res.json(rows[0])
-	});
-})
+/*
+//////////////////////////////////////////////////////////////////////////////////////////
+Contatos - Teste do Curso Tecnospeed
+//////////////////////////////////////////////////////////////////////////////////////////
+*/
 
-app.post('/itensmesa', (req, res) => {
-		var usuario = req.body
-		var sql = 'insert into contatos (nome, email) values (?, ?)'
-		connection.query(sql, [usuario.nome, usuario.email], function(err, rows, fields) {
-			if (err) throw err;
-			res.json(rows)
-		});
-})
 
-app.put('/itensmesa', (req, res) => {
-		var usuario = req.body
-		var sql = 'update contatos set nome=?, email=? where id=?'
-		connection.query(sql, [usuario.nome, usuario.email, usuario.id], function(err, rows, fields) {
-			if (err) throw err;
-			res.json(rows)
-		});
-})
+// app.get('/itensmesa/:id', (req, res) => {
+// 	connection.query('select * from contatos where id = ?',[req.params.id], function(err, rows, fields) {
+// 		if (err) throw err;
+// 		res.json(rows[0])
+// 	});
+// })
+
+// app.post('/itensmesa', (req, res) => {
+// 		var usuario = req.body
+// 		var sql = 'insert into contatos (nome, email) values (?, ?)'
+// 		connection.query(sql, [usuario.nome, usuario.email], function(err, rows, fields) {
+// 			if (err) throw err;
+// 			res.json(rows)
+// 		});
+// })
+
+// app.put('/itensmesa', (req, res) => {
+// 		var usuario = req.body
+// 		var sql = 'update contatos set nome=?, email=? where id=?'
+// 		connection.query(sql, [usuario.nome, usuario.email, usuario.id], function(err, rows, fields) {
+// 			if (err) throw err;
+// 			res.json(rows)
+// 		});
+// })
 
 /*
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -286,7 +299,8 @@ app.get('/api/v1/vistoriaspordata/:data', (req, res) => {
 				'AND (csvVisIdItem      = csvChkItemId) ' +
 		'WHERE (csvVisData = ?)';
 
-connection.query(sql, [req.params.data], 
+
+	connection.query(sql, [req.params.data], 
 		function(err, rows, fields) {
 			if (err) throw err;
 			res.json(rows)
@@ -294,5 +308,29 @@ connection.query(sql, [req.params.data],
 	);
 })
 
+app.post('/api/v1/autocom', (req, res) => {
+	var dados = req.body
+
+
+//    var sql  = 'insert into apiAutocom(';
+//        sql += ' Cnpj, Produto, RazaoDadosCadastrais ';
+//        sql += ') ';
+//        sql += 'value ( ?,?,? )';
+
+
+	var sql  = '';
+	sql += 'INSERT IGNORE INTO apiAutocom ( Cnpj, Produto, RazaoDadosCadastrais ) VALUE ( ?, ?, ? ) ';
+	// sql += 'WHERE NOT EXISTS ( SELECT Cnpj FROM apiAutocom WHERE ( Cnpj = "' + dados.Cnpj + '" ) )';
+	connection.query(sql, [
+            dados.Cnpj, dados.Produto, dados.RazaoDadosCadastrais
+        ], 
+        function(err, rows, fields) {
+			if (err) throw err;
+			res.json(rows)
+		}
+	);
+})
 
 app.listen(3000, () => console.log('API rodando na porta 3000') )
+
+
