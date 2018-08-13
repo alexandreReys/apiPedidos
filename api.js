@@ -229,6 +229,16 @@ app.get('/api/v1/ChecklistItem/:idCliente/:idLocal/:idUnidade/:idChecklist', (re
 	});
 })
 
+app.get('/api/v1/usuarios', (req, res) => {
+	let sql = 'SELECT * FROM csvUsuario ';
+	connection.query(
+		sql, [], 
+		function(err, rows, fields) {
+			if (err) throw err;
+			res.json(rows)
+		}
+	);
+})
 app.get('/api/v1/usuario/:usuario/:senha', (req, res) => {
 	let sql = 
 		'SELECT * ' +
