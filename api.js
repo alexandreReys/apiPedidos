@@ -148,14 +148,6 @@ Controle de Serviços e Vistorias
 //////////////////////////////////////////////////////////////////////////////////////////
 */
 
-app.get('/api/v1/clientes', (req, res) => {
-	var sql = 'select * from csvCliente'
-	connection.query(sql, [req.params.nummesa], function(err, rows, fields) {
-		if (err) throw err;
-		res.json(rows)
-	});
-})
-
 app.get('/api/v1/clienteLocais/:id', (req, res) => {
 	connection.query('select * from csvClienteLocal where csvCliLocIdCliente = ?',[req.params.id], 
 		function(err, rows, fields) {
@@ -164,7 +156,6 @@ app.get('/api/v1/clienteLocais/:id', (req, res) => {
 		}
 	);
 })
-
 app.get('/api/v1/clienteLocaisUnid/:idCliente/:idLocal', (req, res) => {
 	let sql = 'select * ' +
 			  'from csvClienteLocalUnid ' +
@@ -175,7 +166,6 @@ app.get('/api/v1/clienteLocaisUnid/:idCliente/:idLocal', (req, res) => {
 		res.json(rows)
 	});
 })
-
 app.get('/api/v1/Checklist/:idCliente/:idLocal/:idUnidade', (req, res) => {
 	let sql = 
 		'SELECT csvChkId, csvChkIdCliente, csvChkIdClienteLocal, csvChkIdClienteLocalUnid, ' +
@@ -198,7 +188,6 @@ app.get('/api/v1/Checklist/:idCliente/:idLocal/:idUnidade', (req, res) => {
 		res.json(rows)
 	});
 })
-
 app.get('/api/v1/ChecklistItem/:idCliente/:idLocal/:idUnidade/:idChecklist', (req, res) => {
 	let sql = 
 		'SELECT csvChkItemId, csvChkItemIdCliente, csvChkItemIdLocal, ' +
@@ -228,17 +217,6 @@ app.get('/api/v1/ChecklistItem/:idCliente/:idLocal/:idUnidade/:idChecklist', (re
 		res.json(rows)
 	});
 })
-
-app.get('/api/v1/usuarios', (req, res) => {
-	let sql = 'SELECT * FROM csvUsuario ';
-	connection.query(
-		sql, [], 
-		function(err, rows, fields) {
-			if (err) throw err;
-			res.json(rows)
-		}
-	);
-})
 app.get('/api/v1/usuario/:usuario/:senha', (req, res) => {
 	let sql = 
 		'SELECT * ' +
@@ -251,7 +229,6 @@ app.get('/api/v1/usuario/:usuario/:senha', (req, res) => {
 		res.json(rows)
 	});
 })
-
 app.post('/api/v1/vistoria', (req, res) => {
 	var usuario = req.body
 
@@ -281,7 +258,6 @@ app.post('/api/v1/vistoria', (req, res) => {
 		}
 	);
 })
-
 app.get('/api/v1/vistoriaspordata/:data', (req, res) => {
 	let sql = 
 		'SELECT csvVisId, csvVisUsuario, csvVisData, csvVisHora, csvVisIdCliente, csvVisIdLocal, ' + 
@@ -308,8 +284,6 @@ app.get('/api/v1/vistoriaspordata/:data', (req, res) => {
 				'AND (csvVisIdChecklist = csvChkItemIdChecklist) ' +
 				'AND (csvVisIdItem      = csvChkItemId) ' +
 		'WHERE (csvVisData = ?)';
-
-
 	connection.query(sql, [req.params.data], 
 		function(err, rows, fields) {
 			if (err) throw err;
@@ -318,22 +292,69 @@ app.get('/api/v1/vistoriaspordata/:data', (req, res) => {
 	);
 })
 
+
+app.get('/api/v1/clientes', (req, res) => {
+	var sql = 'select * from csvCliente'
+	connection.query(
+		sql, [], 
+		function(err, rows, fields) {
+			if (err) throw err;
+			res.json(rows)
+		}
+	);
+})
+app.get('/api/v1/usuarios', (req, res) => {
+	let sql = 'SELECT * FROM csvUsuario ';
+	connection.query(
+		sql, [], 
+		function(err, rows, fields) {
+			if (err) throw err;
+			res.json(rows)
+		}
+	);
+})
+app.get('/api/v1/locais', (req, res) => {
+	let sql = 'SELECT * FROM csvClienteLocal ';
+	connection.query(
+		sql, [], 
+		function(err, rows, fields) {
+			if (err) throw err;
+			res.json(rows)
+		}
+	);
+})
+app.get('/api/v1/unidades', (req, res) => {
+	let sql = 'SELECT * FROM csvClienteLocalUnid ';
+	connection.query(
+		sql, [], 
+		function(err, rows, fields) {
+			if (err) throw err;
+			res.json(rows)
+		}
+	);
+})
+app.get('/api/v1/checklists', (req, res) => {
+	let sql = 'SELECT * FROM csvChecklist ';
+	connection.query(
+		sql, [], 
+		function(err, rows, fields) {
+			if (err) throw err;
+			res.json(rows)
+		}
+	);
+})
+
+/*
+//////////////////////////////////////////////////////////////////////////////////////////
+Api Sistema AutoCom
+//////////////////////////////////////////////////////////////////////////////////////////
+*/
+
 app.post('/api/v1/autocom', (req, res) => {
 	var dados = req.body
-
-
-//    var sql  = 'insert into apiAutocom(';
-//        sql += ' Cnpj, Produto, RazaoDadosCadastrais ';
-//        sql += ') ';
-//        sql += 'value ( ?,?,? )';
-
-
-	var sql  = '';
-	sql += 'INSERT IGNORE INTO apiAutocom ( Cnpj, Produto, RazaoDadosCadastrais ) VALUE ( ?, ?, ? ) ';
-	// sql += 'WHERE NOT EXISTS ( SELECT Cnpj FROM apiAutocom WHERE ( Cnpj = "' + dados.Cnpj + '" ) )';
-	connection.query(sql, [
-            dados.Cnpj, dados.Produto, dados.RazaoDadosCadastrais
-        ], 
+	let sql = 'INSERT IGNORE INTO apiAutocom ( Cnpj, Produto, RazaoDadosCadastrais ) VALUE ( ?, ?, ? ) ';
+	connection.query(
+		sql, [dados.Cnpj, dados.Produto, dados.RazaoDadosCadastrais], 
         function(err, rows, fields) {
 			if (err) throw err;
 			res.json(rows)
@@ -342,5 +363,3 @@ app.post('/api/v1/autocom', (req, res) => {
 })
 
 app.listen(3000, () => console.log('API rodando na porta 3000') )
-
-
