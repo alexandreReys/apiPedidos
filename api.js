@@ -343,6 +343,16 @@ app.get('/api/v1/checklists', (req, res) => {
 		}
 	);
 })
+app.get('/api/v1/ChecklistItens', (req, res) => {
+	let sql = 'SELECT * FROM csvChecklistItem ';
+	connection.query(
+		sql, [], 
+		function(err, rows, fields) {
+			if (err) throw err;
+			res.json(rows)
+		}
+	);
+})
 
 /*
 //////////////////////////////////////////////////////////////////////////////////////////
