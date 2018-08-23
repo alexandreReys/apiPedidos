@@ -360,11 +360,67 @@ Api Sistema AutoCom
 //////////////////////////////////////////////////////////////////////////////////////////
 */
 
+// app.post('/api/v1/autocom', (req, res) => {
+// 	var dados = req.body
+// 	let sql = 'INSERT IGNORE INTO apiAutocom ( Cnpj, Produto, RazaoDadosCadastrais ) VALUE ( ?, ?, ? ) ';
+// 	connection.query(
+// 		sql, [], 
+//         function(err, rows, fields) {
+// 			if (err) throw err;
+// 			res.json(rows)
+// 		}
+// 	);
+// })
+
 app.post('/api/v1/autocom', (req, res) => {
-	var dados = req.body
-	let sql = 'INSERT IGNORE INTO apiAutocom ( Cnpj, Produto, RazaoDadosCadastrais ) VALUE ( ?, ?, ? ) ';
-	connection.query(
-		sql, [dados.Cnpj, dados.Produto, dados.RazaoDadosCadastrais], 
+	var dados = req.body;
+	let sql = 
+		'INSERT INTO apiAutocom ' +
+			'( ' + 
+				'Cnpj, Produto, Versao, Data, VersaoAutocom, RazaoDadosCadastrais, ' +
+		      	'TelefoneDC, ContatoDC, EnderecoDC, NumeroDC, CidadeDC, BairroDC, '  + 
+		      	'EstadoDC, CepDC ' + 
+		     ')' +
+		'VALUE ( ' + 
+			'"' + dados.Cnpj + '", ' + 
+			'"' + dados.Produto + '", ' + 
+			'"' + dados.Versao + '", ' + 
+
+			'"' + dados.Data + '", ' + 
+			'"' + dados.VersaoAutocom + '", ' + 
+			'"' + dados.RazaoDadosCadastrais + '", ' + 
+
+			'"' + dados.TelefoneDC + '", ' + 
+			'"' + dados.ContatoDC + '", ' + 
+			'"' + dados.EnderecoDC + '", ' + 
+
+			'"' + dados.NumeroDC + '", ' + 
+			'"' + dados.CidadeDC + '", ' + 
+			'"' + dados.BairroDC + '", ' + 
+
+			'"' + dados.EstadoDC + '", ' + 
+			'"' + dados.CepDC + '"  ' + 
+		') ' +
+		'ON DUPLICATE KEY ' +
+		'UPDATE ' +
+			'Versao = "'               + dados.Versao + '", ' +
+			'Data = "'                 + dados.Data + '", ' +
+			'VersaoAutocom = "'        + dados.VersaoAutocom + '", ' +
+			'RazaoDadosCadastrais = "' + dados.RazaoDadosCadastrais + '", ' +
+
+			'TelefoneDC = "' + dados.TelefoneDC + '", ' + 
+			'ContatoDC = "'  + dados.ContatoDC + '", ' + 
+			'EnderecoDC = "' + dados.EnderecoDC + '", ' + 
+
+			'NumeroDC = "' + dados.NumeroDC + '", ' + 
+			'CidadeDC = "' + dados.CidadeDC + '", ' + 
+			'BairroDC = "' + dados.BairroDC + '", ' + 
+
+			'EstadoDC = "' + dados.EstadoDC + '", ' + 
+			'CepDC = "'    + dados.CepDC + '" ';
+
+	// console.log(sql);
+	connection.query(sql, [], 
         function(err, rows, fields) {
 			if (err) throw err;
 			res.json(rows)
