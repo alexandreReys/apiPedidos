@@ -428,4 +428,68 @@ app.post('/api/v1/autocom', (req, res) => {
 	);
 })
 
+app.post('/api/v1/autocom1', (req, res) => {
+	var dados = req.body;
+
+	let data = new Date;
+	let dia = data.getDate();
+	let mes = data.getMonth();
+	let ano = data.getFullYear();
+	data = ano + '/' + (mes++) + '/' + dia;
+
+
+	let sql = 
+		'INSERT INTO apiAutocom ' +
+			'( ' + 
+				'Cnpj, Produto, Versao, Data, VersaoAutocom, RazaoDadosCadastrais, ' +
+		      	'TelefoneDC, ContatoDC, EnderecoDC, NumeroDC, CidadeDC, BairroDC, '  + 
+		      	'EstadoDC, CepDC ' + 
+		     ')' +
+		'VALUE ( ' + 
+			'"' + dados.Cnpj + '", ' + 
+			'"' + dados.Produto + '", ' + 
+			'"' + dados.Versao + '", ' + 
+
+			'"' + data + '", ' + 
+			'"' + dados.VersaoAutocom + '", ' + 
+			'"' + dados.RazaoDadosCadastrais + '", ' + 
+
+			'"' + dados.TelefoneDC + '", ' + 
+			'"' + dados.ContatoDC + '", ' + 
+			'"' + dados.EnderecoDC + '", ' + 
+
+			'"' + dados.NumeroDC + '", ' + 
+			'"' + dados.CidadeDC + '", ' + 
+			'"' + dados.BairroDC + '", ' + 
+
+			'"' + dados.EstadoDC + '", ' + 
+			'"' + dados.CepDC + '"  ' + 
+		') ' +
+		'ON DUPLICATE KEY ' +
+		'UPDATE ' +
+			'Versao = "'               + dados.Versao + '", ' +
+			'Data = "'                 + data + '", ' +
+			'VersaoAutocom = "'        + dados.VersaoAutocom + '", ' +
+			'RazaoDadosCadastrais = "' + dados.RazaoDadosCadastrais + '", ' +
+
+			'TelefoneDC = "' + dados.TelefoneDC + '", ' + 
+			'ContatoDC = "'  + dados.ContatoDC + '", ' + 
+			'EnderecoDC = "' + dados.EnderecoDC + '", ' + 
+
+			'NumeroDC = "' + dados.NumeroDC + '", ' + 
+			'CidadeDC = "' + dados.CidadeDC + '", ' + 
+			'BairroDC = "' + dados.BairroDC + '", ' + 
+
+			'EstadoDC = "' + dados.EstadoDC + '", ' + 
+			'CepDC = "'    + dados.CepDC + '" ';
+
+	// console.log(sql);
+	connection.query(sql, [], 
+        function(err, rows, fields) {
+			if (err) throw err;
+			res.json(rows)
+		}
+	);
+})
+
 app.listen(3000, () => console.log('API rodando na porta 3000') )
