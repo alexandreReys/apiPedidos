@@ -32,7 +32,6 @@ app.get('/itensmesa/:nummesa', (req, res) => {
 		res.json(rows)
 	});
 });
-
 app.get('/tiposCadpro', (req, res) => {
 	var sql = 'select * from Class2Net'
 	connection.query(sql, [req.params.nummesa], function(err, rows, fields) {
@@ -40,7 +39,6 @@ app.get('/tiposCadpro', (req, res) => {
 		res.json(rows)
 	});
 });
-
 app.get('/cadpro/:codpro', (req, res) => {
 	var sql = 
 		'SELECT p1.Cadpro1NetLoja, p1.Cadpro1NetCodigo, ' +
@@ -55,7 +53,6 @@ app.get('/cadpro/:codpro', (req, res) => {
 			res.json(rows[0])
 	});
 });
-
 app.get('/cadproporid/:id', (req, res) => {
 	var sql = 
 		'SELECT p1.Cadpro1NetLoja, p1.Cadpro1NetCodigo, ' +
@@ -70,7 +67,6 @@ app.get('/cadproporid/:id', (req, res) => {
 			res.json(rows[0])
 	});
 })
-
 app.get('/cadproportipo/:tipo', (req, res) => {
 	var sql = 
 			'SELECT p1.Cadpro1NetLoja, p.CadproNetClass2, p1.Cadpro1NetCodigo, '+
@@ -85,7 +81,6 @@ app.get('/cadproportipo/:tipo', (req, res) => {
 			res.json(rows)
 	});
 })
-
 app.post('/cadpro', (req, res) => {
 	var par = req.body
 	var sql = 
@@ -102,7 +97,6 @@ app.post('/cadpro', (req, res) => {
 		}
 	);
 })
-
 app.delete('/itensmesa/:id', (req, res) => {
 	connection.query('delete from appPed where pedid = ?',[req.params.id], function(err, rows, fields) {
 		if (err) throw err;
@@ -115,32 +109,101 @@ app.delete('/itensmesa/:id', (req, res) => {
 Contatos - Teste do Curso Tecnospeed
 //////////////////////////////////////////////////////////////////////////////////////////
 */
+	// app.get('/itensmesa/:id', (req, res) => {
+		// 	connection.query('select * from contatos where id = ?',[req.params.id], function(err, rows, fields) {
+		// 		if (err) throw err;
+		// 		res.json(rows[0])
+		// 	});
+	// })
+
+	// app.post('/itensmesa', (req, res) => {
+		// 		var usuario = req.body
+		// 		var sql = 'insert into contatos (nome, email) values (?, ?)'
+		// 		connection.query(sql, [usuario.nome, usuario.email], function(err, rows, fields) {
+		// 			if (err) throw err;
+		// 			res.json(rows)
+		// 		});
+	// })
+
+	// app.put('/itensmesa', (req, res) => {
+		// 		var usuario = req.body
+		// 		var sql = 'update contatos set nome=?, email=? where id=?'
+		// 		connection.query(sql, [usuario.nome, usuario.email, usuario.id], function(err, rows, fields) {
+		// 			if (err) throw err;
+		// 			res.json(rows)
+		// 		});
+	// })
+
+/*
+//////////////////////////////////////////////////////////////////////////////////////////
+Api Sistema AutoCom
+//////////////////////////////////////////////////////////////////////////////////////////
+*/
+
+app.post('/api/v1/autocom', (req, res) => {
+	var dados = req.body;
+	//let sql = 'INSERT IGNORE INTO apiAutocom ( Cnpj, Produto, RazaoDadosCadastrais ) VALUE ( ?, ?, ? ) ';
+
+	let data = new Date;
+	let dia = data.getDate();
+	let mes = data.getMonth();
+	let ano = data.getFullYear();
+	data = ano + '/' + (mes++) + '/' + dia;
 
 
-// app.get('/itensmesa/:id', (req, res) => {
-// 	connection.query('select * from contatos where id = ?',[req.params.id], function(err, rows, fields) {
-// 		if (err) throw err;
-// 		res.json(rows[0])
-// 	});
-// })
+	let sql = 
+		'INSERT INTO apiAutocom ' +
+			'( ' + 
+				'Cnpj, Produto, Versao, Data, VersaoAutocom, RazaoDadosCadastrais, ' +
+		      	'TelefoneDC, ContatoDC, EnderecoDC, NumeroDC, CidadeDC, BairroDC, '  + 
+		      	'EstadoDC, CepDC ' + 
+		     ')' +
+		'VALUE ( ' + 
+			'"' + dados.Cnpj + '", ' + 
+			'"' + dados.Produto + '", ' + 
+			'"' + dados.Versao + '", ' + 
 
-// app.post('/itensmesa', (req, res) => {
-// 		var usuario = req.body
-// 		var sql = 'insert into contatos (nome, email) values (?, ?)'
-// 		connection.query(sql, [usuario.nome, usuario.email], function(err, rows, fields) {
-// 			if (err) throw err;
-// 			res.json(rows)
-// 		});
-// })
+			'"' + data + '", ' + 
+			'"' + dados.VersaoAutocom + '", ' + 
+			'"' + dados.RazaoDadosCadastrais + '", ' + 
 
-// app.put('/itensmesa', (req, res) => {
-// 		var usuario = req.body
-// 		var sql = 'update contatos set nome=?, email=? where id=?'
-// 		connection.query(sql, [usuario.nome, usuario.email, usuario.id], function(err, rows, fields) {
-// 			if (err) throw err;
-// 			res.json(rows)
-// 		});
-// })
+			'"' + dados.TelefoneDC + '", ' + 
+			'"' + dados.ContatoDC + '", ' + 
+			'"' + dados.EnderecoDC + '", ' + 
+
+			'"' + dados.NumeroDC + '", ' + 
+			'"' + dados.CidadeDC + '", ' + 
+			'"' + dados.BairroDC + '", ' + 
+
+			'"' + dados.EstadoDC + '", ' + 
+			'"' + dados.CepDC + '"  ' + 
+		') ' +
+		'ON DUPLICATE KEY ' +
+		'UPDATE ' +
+			'Versao = "'               + dados.Versao + '", ' +
+			'Data = "'                 + data + '", ' +
+			'VersaoAutocom = "'        + dados.VersaoAutocom + '", ' +
+			'RazaoDadosCadastrais = "' + dados.RazaoDadosCadastrais + '", ' +
+
+			'TelefoneDC = "' + dados.TelefoneDC + '", ' + 
+			'ContatoDC = "'  + dados.ContatoDC + '", ' + 
+			'EnderecoDC = "' + dados.EnderecoDC + '", ' + 
+
+			'NumeroDC = "' + dados.NumeroDC + '", ' + 
+			'CidadeDC = "' + dados.CidadeDC + '", ' + 
+			'BairroDC = "' + dados.BairroDC + '", ' + 
+
+			'EstadoDC = "' + dados.EstadoDC + '", ' + 
+			'CepDC = "'    + dados.CepDC + '" ';
+
+	// console.log(sql);
+	connection.query(sql, [], 
+        function(err, rows, fields) {
+			if (err) throw err;
+			res.json(rows)
+		}
+	);
+})
 
 /*
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -291,7 +354,19 @@ app.get('/api/v1/vistoriaspordata/:data', (req, res) => {
 		}
 	);
 })
-
+app.get('/api/v1/vistoriasdatas', (req, res) => {
+	let sql = 
+		'SELECT distinct DATE_FORMAT(csvVisData,"%d/%m/%Y") csvVisData ' + 
+		'FROM csvVistoria ' +
+		'ORDER BY csvVisData';
+	connection.query(sql, [req.params.data], 
+		function(err, rows, fields) {
+			if (err) throw err;
+			// console.log(rows);
+			res.json(rows)
+		}
+	);
+})
 
 app.get('/api/v1/clientes', (req, res) => {
 	var sql = 'select * from csvCliente'
@@ -356,84 +431,8 @@ app.get('/api/v1/ChecklistItens', (req, res) => {
 
 /*
 //////////////////////////////////////////////////////////////////////////////////////////
-Api Sistema AutoCom
+//
 //////////////////////////////////////////////////////////////////////////////////////////
 */
-
-// app.post('/api/v1/autocom', (req, res) => {
-// 	var dados = req.body
-// 	let sql = 'INSERT IGNORE INTO apiAutocom ( Cnpj, Produto, RazaoDadosCadastrais ) VALUE ( ?, ?, ? ) ';
-// 	connection.query(
-// 		sql, [], 
-//         function(err, rows, fields) {
-// 			if (err) throw err;
-// 			res.json(rows)
-// 		}
-// 	);
-// })
-
-app.post('/api/v1/autocom', (req, res) => {
-	var dados = req.body;
-
-	let data = new Date;
-	let dia = data.getDate();
-	let mes = data.getMonth();
-	let ano = data.getFullYear();
-	data = ano + '/' + (mes++) + '/' + dia;
-
-
-	let sql = 
-		'INSERT INTO apiAutocom ' +
-			'( ' + 
-				'Cnpj, Produto, Versao, Data, VersaoAutocom, RazaoDadosCadastrais, ' +
-		      	'TelefoneDC, ContatoDC, EnderecoDC, NumeroDC, CidadeDC, BairroDC, '  + 
-		      	'EstadoDC, CepDC ' + 
-		     ')' +
-		'VALUE ( ' + 
-			'"' + dados.Cnpj + '", ' + 
-			'"' + dados.Produto + '", ' + 
-			'"' + dados.Versao + '", ' + 
-
-			'"' + data + '", ' + 
-			'"' + dados.VersaoAutocom + '", ' + 
-			'"' + dados.RazaoDadosCadastrais + '", ' + 
-
-			'"' + dados.TelefoneDC + '", ' + 
-			'"' + dados.ContatoDC + '", ' + 
-			'"' + dados.EnderecoDC + '", ' + 
-
-			'"' + dados.NumeroDC + '", ' + 
-			'"' + dados.CidadeDC + '", ' + 
-			'"' + dados.BairroDC + '", ' + 
-
-			'"' + dados.EstadoDC + '", ' + 
-			'"' + dados.CepDC + '"  ' + 
-		') ' +
-		'ON DUPLICATE KEY ' +
-		'UPDATE ' +
-			'Versao = "'               + dados.Versao + '", ' +
-			'Data = "'                 + data + '", ' +
-			'VersaoAutocom = "'        + dados.VersaoAutocom + '", ' +
-			'RazaoDadosCadastrais = "' + dados.RazaoDadosCadastrais + '", ' +
-
-			'TelefoneDC = "' + dados.TelefoneDC + '", ' + 
-			'ContatoDC = "'  + dados.ContatoDC + '", ' + 
-			'EnderecoDC = "' + dados.EnderecoDC + '", ' + 
-
-			'NumeroDC = "' + dados.NumeroDC + '", ' + 
-			'CidadeDC = "' + dados.CidadeDC + '", ' + 
-			'BairroDC = "' + dados.BairroDC + '", ' + 
-
-			'EstadoDC = "' + dados.EstadoDC + '", ' + 
-			'CepDC = "'    + dados.CepDC + '" ';
-
-	// console.log(sql);
-	connection.query(sql, [], 
-        function(err, rows, fields) {
-			if (err) throw err;
-			res.json(rows)
-		}
-	);
-})
 
 app.listen(3000, () => console.log('API rodando na porta 3000') )
