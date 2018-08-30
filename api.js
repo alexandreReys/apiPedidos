@@ -358,7 +358,9 @@ app.get('/api/v1/vistoriasdatas', (req, res) => {
 	let sql = 
 		'SELECT distinct DATE_FORMAT(csvVisData,"%d/%m/%Y") csvVisData ' + 
 		'FROM csvVistoria ' +
-		'ORDER BY csvVisData';
+		'ORDER BY SUBSTR( csvVisData, 7, 4), ' +
+                 'SUBSTR( csvVisData, 4, 2), ' +
+                 'SUBSTR( csvVisData, 1, 2)';
 	connection.query(sql, [req.params.data], 
 		function(err, rows, fields) {
 			if (err) throw err;
