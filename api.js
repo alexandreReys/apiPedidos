@@ -146,9 +146,9 @@ app.post('/api/v1/autocom', (req, res) => {
 
 	let data = new Date;
 	let dia = data.getDate();
-	let mes = data.getMonth();
+	let mes = data.getMonth() + 1;
 	let ano = data.getFullYear();
-	data = ano + '/' + (mes++) + '/' + dia;
+	data = ano + '/' + mes + '/' + dia;
 
 
 	let sql = 
