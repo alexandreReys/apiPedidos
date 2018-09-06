@@ -150,6 +150,10 @@ app.post('/api/v1/autocom', (req, res) => {
 	let ano = data.getFullYear();
 	data = ano + '/' + mes + '/' + dia;
 
+    let versaoAutocom = dados.VersaoAutocom;
+    if (versaoAutocom == 'undefined') {
+    	versaoAutocom = '';
+    }
 
 	let sql = 
 		'INSERT INTO apiAutocom ' +
@@ -164,7 +168,7 @@ app.post('/api/v1/autocom', (req, res) => {
 			'"' + dados.Versao + '", ' + 
 
 			'"' + data + '", ' + 
-			'"' + dados.VersaoAutocom + '", ' + 
+			'"' + versaoAutocom + '", ' + 
 			'"' + dados.RazaoDadosCadastrais + '", ' + 
 
 			'"' + dados.TelefoneDC + '", ' + 
@@ -182,7 +186,7 @@ app.post('/api/v1/autocom', (req, res) => {
 		'UPDATE ' +
 			'Versao = "'               + dados.Versao + '", ' +
 			'Data = "'                 + data + '", ' +
-			'VersaoAutocom = "'        + dados.VersaoAutocom + '", ' +
+			'VersaoAutocom = "'        + versaoAutocom + '", ' +
 			'RazaoDadosCadastrais = "' + dados.RazaoDadosCadastrais + '", ' +
 
 			'TelefoneDC = "' + dados.TelefoneDC + '", ' + 
