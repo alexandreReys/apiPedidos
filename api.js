@@ -208,6 +208,15 @@ app.post('/api/v1/autocom', (req, res) => {
 		}
 	);
 })
+app.get('/api/v1/autocomCnpj/:cnpj', (req, res) => {
+	var sql = 'select RazaoDadosCadastrais, VersaoAutocom, Produto ' + 
+			  'from apiAutocom ' + 
+			  'where Cnpj = ?'
+	connection.query(sql, [req.params.cnpj], function(err, rows, fields) {
+		if (err) throw err;
+		res.json(rows)
+	});
+});
 
 /*
 //////////////////////////////////////////////////////////////////////////////////////////
