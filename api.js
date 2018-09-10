@@ -297,8 +297,9 @@ app.get('/api/v1/usuario/:usuario/:senha', (req, res) => {
 	let sql = 
 		'SELECT * ' +
 		'FROM csvUsuario ' +
-		'WHERE (csvUsuarioLogin = ?) ' +
-		'  AND (csvUsuarioSenha = ?) ';
+		'INNER JOIN csvUsuarioCliente ON csvUsuCli_idUsuario =  csvUsuarioId ' +
+		'WHERE (csvUsuarioLogin = ?) AND (csvUsuarioSenha = ?) ' +
+		'ORDER BY csvUsuCli_idCliente ';
 	connection.query(sql, [req.params.usuario, req.params.senha], 
 		function(err, rows, fields) {
 			if (err) throw err;
@@ -387,6 +388,22 @@ app.get('/api/v1/clientes', (req, res) => {
 	var sql = 'select * from csvCliente'
 	connection.query(
 		sql, [], 
+		function(err, rows, fields) {
+			if (err) throw err;
+			res.json(rows)
+		}
+	);
+})
+app.get('/api/v1/clientesUsuario/:usuario', (req, res) => {
+	var sql = 
+	  'SELECT * ' +
+	  'FROM csvCliente ' +
+	  	'INNER JOIN csvUsuarioCliente ' +
+		'ON csvUsuCli_idCliente =  csvCliId ' +
+	  'WHERE (csvUsuCli_idUsuario = ?) ' +
+	  'ORDER BY csvUsuCli_idCliente';
+	connection.query(
+		sql, [req.params.usuario], 
 		function(err, rows, fields) {
 			if (err) throw err;
 			res.json(rows)
