@@ -12,7 +12,10 @@ var db_pass = process.env.db_pass
 var db_data = process.env.db_data
 
 var connection = mysql.createPool({
-	connectionLimit : 10,
+	connectionLimit : 1000,
+	connectTimeout : 60 * 60 * 1000, 
+	acquireTimeout : 60 * 60 * 1000, 
+	timeout : 60 * 60 * 1000, 
 	host     : db_host,
 	user     : db_user,
 	password : db_pass,
