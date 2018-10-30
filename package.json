@@ -1,12 +1,32 @@
 {
-    "name": "anr-api-pedidos",
-    "displayName": "anr-api-pedidos",
-    "version": "1.0.0",
-    "description": "API / MYSql integrado com appPedidos Android",
-    "main": "api.js",
-  	"scripts": {
-    	"start": "node api"
-  	},
-    "author": "Alexandre Nunes Reys",
-    "license": "Apache-2.0"
+  "name": "anr-api-pedidos",
+  "displayName": "anr-api-pedidos",
+  "version": "1.0.0",
+  "description": "API / MYSql integrado com appPedidos Android",
+  "main": "api.js",
+  "scripts": {
+    "start": "node ./bin/server.js",
+    "ndm": "nodemon ./bin/server.js"
+  },
+  "author": "Alexandre Nunes Reys",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "nodemon": "^1.18.5"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "mysql": "^2.15.0",
+    "normalize-port": "^1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexandreReys/apiPedidos.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/alexandreReys/apiPedidos/issues"
+  },
+  "homepage": "https://github.com/alexandreReys/apiPedidos#readme"
 }
