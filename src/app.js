@@ -4,11 +4,12 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const connection = require('./mysql/mysql-connection');
+
+const nodemailer = require("nodemailer");
+
 //  carrega as rotas
 const indexRoute = require('./routes/index-routes');
 const autocomRoute = require('./routes/autocom-routes');
-
-const nodemailer = require("nodemailer");
 
 const app = express();
 
@@ -33,7 +34,7 @@ app.use(cors());
 				});
 				const mailOptions = {
 					from: 'anr.scs.495@gmail.com',        
-					to: 'alexandre@anrsistemas.com.br, anr.alexandre@gmail.com',               
+					to: 'anr.alexandre@gmail.com, alexandre@anrsistemas.com.br, pamela@anrsistemas.com.br',               
 					subject: dados.assunto, 	
 					html: dados.mensagem		
 				};
