@@ -33,7 +33,7 @@ app.use(cors());
 				});
 				const mailOptions = {
 					from: 'anr.scs.495@gmail.com',        
-					to: 'anr.alexandre@gmail.com',               
+					to: 'alexandre@anrsistemas.com.br, anr.alexandre@gmail.com',               
 					subject: dados.assunto, 	
 					html: dados.mensagem		
 				};
