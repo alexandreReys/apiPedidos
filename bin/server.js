@@ -5,7 +5,10 @@ const http = require('http');
 const debug = require('debug')('api:server');
 const normalizePort = require('normalize-port');
 
-const port = normalizePort(process.env.server_port || '3000');  // Variavel Ambiental
+const port = normalizePort(
+	process.env.server_port || '3000'  // Variavel Ambiental
+);  
+
 app.set('port', port);
 
 const server = http.createServer(app);

@@ -4,10 +4,11 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const connection = require('./mysql/mysql-connection');
-
 //  carrega as rotas
 const indexRoute = require('./routes/index-routes');
 const autocomRoute = require('./routes/autocom-routes');
+
+const nodemailer = require("nodemailer");
 
 const app = express();
 
@@ -15,10 +16,39 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cors());
 
+//////////////////////////////////////////////////////////////////////////////////////////
+//  Envio de E-Mail com NodeMailer
+//////////////////////////////////////////////////////////////////////////////////////////
+			app.post('/api/v1/mailAnrSiteContato', (req, res) => {
+				var dados = req.body;
+				var transporter = nodemailer.createTransport({
+					service: 'gmail',
+					auth: {
+						user: 'anr.scs.495@gmail.com',
+						pass: 'q1@w2e3.r4'
+					},
+					tls: {
+						rejectUnauthorized: false
+					}
+				});
+				const mailOptions = {
+					from: 'anr.scs.495@gmail.com',        
+					to: 'anr.alexandre@gmail.com',               
+					subject: dados.assunto, 	
+					html: dados.mensagem		
+				};
+				transporter.sendMail(mailOptions, function (err, info) {
+					if(err) {
+						res.status(400).json(err);
+					} else {
+						res.status(200).json(info);
+					};
+				});
+			});
 
-		//////////////////////////////////////////////////////////////////////////////////////////
-		//  Controle de Mesas / Pedidos
-		//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+//  Controle de Mesas / Pedidos
+//////////////////////////////////////////////////////////////////////////////////////////
 			app.get('/itensmesa/:nummesa', (req, res) => {
 				var sql = 'select * from appPed where PedMesaComanda = ?'
 				connection.query(sql, [req.params.nummesa], function(err, rows, fields) {
@@ -98,23 +128,23 @@ app.use(cors());
 				});
 			})
 
-		//////////////////////////////////////////////////////////////////////////////////////////
-		//  Contatos - Teste do Curso Tecnospeed
-		//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+//  Contatos - Teste do Curso Tecnospeed
+//////////////////////////////////////////////////////////////////////////////////////////
 
 			app.get('/itensmesa/:id', (req, res) => {
-					connection.query('select * from contatos where id = ?',[req.params.id], function(err, rows, fields) {
-						if (err) throw err;
-						res.json(rows[0])
-					});
+				connection.query('select * from contatos where id = ?',[req.params.id], function(err, rows, fields) {
+					if (err) throw err;
+					res.json(rows[0])
+				});
 			})
 			app.post('/itensmesa', (req, res) => {
-						var usuario = req.body
-						var sql = 'insert into contatos (nome, email) values (?, ?)'
-						connection.query(sql, [usuario.nome, usuario.email], function(err, rows, fields) {
-							if (err) throw err;
-							res.json(rows)
-						});
+				var usuario = req.body
+				var sql = 'insert into contatos (nome, email) values (?, ?)'
+				connection.query(sql, [usuario.nome, usuario.email], function(err, rows, fields) {
+					if (err) throw err;
+					res.json(rows)
+				});
 			})
 			app.put('/itensmesa', (req, res) => {
 						var usuario = req.body
@@ -125,9 +155,9 @@ app.use(cors());
 						});
 			})
 
-		//////////////////////////////////////////////////////////////////////////////////////////
-		//  Controle de Serviços e Vistorias
-		//////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+//  Controle de Serviços e Vistorias
+//////////////////////////////////////////////////////////////////////////////////////////
 
 			app.get('/api/v1/clienteLocais/:id', (req, res) => {
 				connection.query('select * from csvClienteLocal where csvCliLocIdCliente = ?',[req.params.id],
@@ -366,10 +396,9 @@ app.use(cors());
 				);
 			})
 
-		//////////////////////////////////////////////////////////////////////////////////////////
-		//
-		/////////////////////////////////////////////////////////////////////////////////////////
-
+//////////////////////////////////////////////////////////////////////////////////////////
+//
+/////////////////////////////////////////////////////////////////////////////////////////
 
 app.use('/', indexRoute);
 app.use('/api/v1/autocom', autocomRoute);
