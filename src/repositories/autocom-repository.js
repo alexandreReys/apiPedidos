@@ -3,16 +3,21 @@
 const connection = require('../mysql/mysql-connection');
 
 exports.getAutocomCnpj = (req, res) => {
-	var sql = 'select RazaoDadosCadastrais, VersaoAutocom, Produto ' +
-			  'from apiAutocom ' +
-			  'where Cnpj = ?';
-	connection.query(sql, [req.params.cnpj], function(err, rows, fields) {
-		if (err) {
-			res.status(400).json(err);
-		} else {
-			res.status(200).json(rows);
-		};
-	});
+
+	res.status(400).send({
+		message: "Desativado"
+	})
+
+	// var sql = 'select RazaoDadosCadastrais, VersaoAutocom, Produto ' +
+	// 		  'from apiAutocom ' +
+	// 		  'where Cnpj = ?';
+	// connection.query(sql, [req.params.cnpj], function(err, rows, fields) {
+	// 	if (err) {
+	// 		res.status(400).json(err);
+	// 	} else {
+	// 		res.status(200).json(rows);
+	// 	};
+	// });
 };
 
 exports.postAutocom = (req, res) => {
