@@ -3,8 +3,8 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const connection = require('./mysql/mysql-connection');
 
+const connection = require('./mysql/mysql-connection');
 const nodemailer = require("nodemailer");
 
 //  carrega as rotas

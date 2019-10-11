@@ -16,71 +16,76 @@ exports.getAutocomCnpj = (req, res) => {
 };
 
 exports.postAutocom = (req, res) => {
-	var dados = req.body;
 
-	let data = new Date;
-	let dia = data.getDate();
-	let mes = data.getMonth() + 1;
-	let ano = data.getFullYear();
-	data = ano + '/' + mes + '/' + dia;
+	res.status(400).send({
+		message: "Desativado"
+	})
 
-    let versaoAutocom = dados.VersaoAutocom;
-    if (versaoAutocom == 'undefined') {
-    	versaoAutocom = '';
-    }
+	// var dados = req.body;
 
-	let sql =
-		'INSERT INTO apiAutocom ' +
-			'( ' +
-				'Cnpj, Produto, Versao, Data, VersaoAutocom, RazaoDadosCadastrais, ' +
-		      	'TelefoneDC, ContatoDC, EnderecoDC, NumeroDC, CidadeDC, BairroDC, '  +
-		      	'EstadoDC, CepDC ' +
-		     ')' +
-		'VALUE ( ' +
-			'"' + dados.Cnpj + '", ' +
-			'"' + dados.Produto + '", ' +
-			'"' + dados.Versao + '", ' +
+	// let data = new Date;
+	// let dia = data.getDate();
+	// let mes = data.getMonth() + 1;
+	// let ano = data.getFullYear();
+	// data = ano + '/' + mes + '/' + dia;
 
-			'"' + data + '", ' +
-			'"' + versaoAutocom + '", ' +
-			'"' + dados.RazaoDadosCadastrais + '", ' +
+    // let versaoAutocom = dados.VersaoAutocom;
+    // if (versaoAutocom == 'undefined') {
+    // 	versaoAutocom = '';
+    // }
 
-			'"' + dados.TelefoneDC + '", ' +
-			'"' + dados.ContatoDC + '", ' +
-			'"' + dados.EnderecoDC + '", ' +
+	// let sql =
+	// 	'INSERT INTO apiAutocom ' +
+	// 		'( ' +
+	// 			'Cnpj, Produto, Versao, Data, VersaoAutocom, RazaoDadosCadastrais, ' +
+	// 	      	'TelefoneDC, ContatoDC, EnderecoDC, NumeroDC, CidadeDC, BairroDC, '  +
+	// 	      	'EstadoDC, CepDC ' +
+	// 	     ')' +
+	// 	'VALUE ( ' +
+	// 		'"' + dados.Cnpj + '", ' +
+	// 		'"' + dados.Produto + '", ' +
+	// 		'"' + dados.Versao + '", ' +
 
-			'"' + dados.NumeroDC + '", ' +
-			'"' + dados.CidadeDC + '", ' +
-			'"' + dados.BairroDC + '", ' +
+	// 		'"' + data + '", ' +
+	// 		'"' + versaoAutocom + '", ' +
+	// 		'"' + dados.RazaoDadosCadastrais + '", ' +
 
-			'"' + dados.EstadoDC + '", ' +
-			'"' + dados.CepDC + '"  ' +
-		') ' +
-		'ON DUPLICATE KEY ' +
-		'UPDATE ' +
-			'Versao = "'               + dados.Versao + '", ' +
-			'Data = "'                 + data + '", ' +
-			'VersaoAutocom = "'        + versaoAutocom + '", ' +
-			'RazaoDadosCadastrais = "' + dados.RazaoDadosCadastrais + '", ' +
+	// 		'"' + dados.TelefoneDC + '", ' +
+	// 		'"' + dados.ContatoDC + '", ' +
+	// 		'"' + dados.EnderecoDC + '", ' +
 
-			'TelefoneDC = "' + dados.TelefoneDC + '", ' +
-			'ContatoDC = "'  + dados.ContatoDC + '", ' +
-			'EnderecoDC = "' + dados.EnderecoDC + '", ' +
+	// 		'"' + dados.NumeroDC + '", ' +
+	// 		'"' + dados.CidadeDC + '", ' +
+	// 		'"' + dados.BairroDC + '", ' +
 
-			'NumeroDC = "' + dados.NumeroDC + '", ' +
-			'CidadeDC = "' + dados.CidadeDC + '", ' +
-			'BairroDC = "' + dados.BairroDC + '", ' +
+	// 		'"' + dados.EstadoDC + '", ' +
+	// 		'"' + dados.CepDC + '"  ' +
+	// 	') ' +
+	// 	'ON DUPLICATE KEY ' +
+	// 	'UPDATE ' +
+	// 		'Versao = "'               + dados.Versao + '", ' +
+	// 		'Data = "'                 + data + '", ' +
+	// 		'VersaoAutocom = "'        + versaoAutocom + '", ' +
+	// 		'RazaoDadosCadastrais = "' + dados.RazaoDadosCadastrais + '", ' +
 
-			'EstadoDC = "' + dados.EstadoDC + '", ' +
-			'CepDC = "'    + dados.CepDC + '" ';
+	// 		'TelefoneDC = "' + dados.TelefoneDC + '", ' +
+	// 		'ContatoDC = "'  + dados.ContatoDC + '", ' +
+	// 		'EnderecoDC = "' + dados.EnderecoDC + '", ' +
 
-	connection.query(sql, [],
-    function(err, rows, fields) {
-			if (err) {
-				res.status(400).json(err)
-			} else {
-				res.status(201).json(rows)
-			}
-		}
-	);
+	// 		'NumeroDC = "' + dados.NumeroDC + '", ' +
+	// 		'CidadeDC = "' + dados.CidadeDC + '", ' +
+	// 		'BairroDC = "' + dados.BairroDC + '", ' +
+
+	// 		'EstadoDC = "' + dados.EstadoDC + '", ' +
+	// 		'CepDC = "'    + dados.CepDC + '" ';
+
+	// connection.query(sql, [],
+    // function(err, rows, fields) {
+	// 		if (err) {
+	// 			res.status(400).json(err)
+	// 		} else {
+	// 			res.status(201).json(rows)
+	// 		}
+	// 	}
+	// );
 }
