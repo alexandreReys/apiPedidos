@@ -4,9 +4,11 @@ const connection = require('../mysql/mysql-connection');
 
 exports.getAutocomCnpj = (req, res) => {
 
-	res.status(400).send({
-		message: "Desativado"
-	})
+	res.status(400).send(
+		{
+			message: "Desativado"
+		}
+	)
 	
 	// var sql = 'select RazaoDadosCadastrais, VersaoAutocom, Produto ' +
 	// 		  'from apiAutocom ' +
