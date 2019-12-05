@@ -30,9 +30,13 @@ exports.postAutocom = (req, res) => {
 	let ano = data.getFullYear();
 	data = ano + '/' + mes + '/' + dia;
 
-	let versaoAutocom = dados.VersaoAutocom;
-	if (versaoAutocom == 'undefined') {
-		versaoAutocom = '';
+	let sVersaoAutocom = dados.VersaoAutocom;
+	if (sVersaoAutocom == 'undefined') {
+		sVersaoAutocom = '';
+	}
+	let sSatAtivacao = dados.SatAtivacao;
+	if (sSatAtivacao == 'undefined') {
+		sSatAtivacao = '';
 	}
 
 	let sql =
@@ -48,8 +52,8 @@ exports.postAutocom = (req, res) => {
 			'"' + dados.Versao + '", ' +
 
 			'"' + data + '", ' +
-			'"' + versaoAutocom + '", ' +
-			'"' + dados.SatAtivacao + '", ' +
+			'"' + sVersaoAutocom + '", ' +
+			'"' + sSatAtivacao + '", ' +
 			'"' + dados.RazaoDadosCadastrais + '", ' +
 
 			'"' + dados.TelefoneDC + '", ' +
@@ -67,8 +71,8 @@ exports.postAutocom = (req, res) => {
 		'UPDATE ' +
 			'Versao = "'               + dados.Versao + '", ' +
 			'Data = "'                 + data + '", ' +
-			'VersaoAutocom = "'        + versaoAutocom + '", ' +
-			'SatAtivacao = "'          + dados.SatAtivacao + '", ' +
+			'VersaoAutocom = "'        + sVersaoAutocom + '", ' +
+			'SatAtivacao = "'          + sSatAtivacao + '", ' +
 			'RazaoDadosCadastrais = "' + dados.RazaoDadosCadastrais + '", ' +
 
 			'TelefoneDC = "' + dados.TelefoneDC + '", ' +
