@@ -30,15 +30,15 @@ exports.postAutocom = (req, res) => {
 	let ano = data.getFullYear();
 	data = ano + '/' + mes + '/' + dia;
 
-    let versaoAutocom = dados.VersaoAutocom;
-    if (versaoAutocom == 'undefined') {
-    	versaoAutocom = '';
-    }
+	let versaoAutocom = dados.VersaoAutocom;
+	if (versaoAutocom == 'undefined') {
+		versaoAutocom = '';
+	}
 
 	let sql =
 		'INSERT INTO apiAutocom ' +
 			'( ' +
-				'Cnpj, Produto, Versao, Data, VersaoAutocom, RazaoDadosCadastrais, ' +
+				'Cnpj, Produto, Versao, Data, VersaoAutocom, SatAtivacao, RazaoDadosCadastrais, ' +
 		      	'TelefoneDC, ContatoDC, EnderecoDC, NumeroDC, CidadeDC, BairroDC, '  +
 		      	'EstadoDC, CepDC ' +
 		     ')' +
@@ -49,6 +49,7 @@ exports.postAutocom = (req, res) => {
 
 			'"' + data + '", ' +
 			'"' + versaoAutocom + '", ' +
+			'"' + dados.SatAtivacao + '", ' +
 			'"' + dados.RazaoDadosCadastrais + '", ' +
 
 			'"' + dados.TelefoneDC + '", ' +
@@ -67,6 +68,7 @@ exports.postAutocom = (req, res) => {
 			'Versao = "'               + dados.Versao + '", ' +
 			'Data = "'                 + data + '", ' +
 			'VersaoAutocom = "'        + versaoAutocom + '", ' +
+			'SatAtivacao = "'          + dados.SatAtivacao + '", ' +
 			'RazaoDadosCadastrais = "' + dados.RazaoDadosCadastrais + '", ' +
 
 			'TelefoneDC = "' + dados.TelefoneDC + '", ' +
