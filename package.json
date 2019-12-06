@@ -6,7 +6,7 @@
   "main": "api.js",
   "scripts": {
     "start": "node ./bin/server.js",
-    "ndm": "nodemon ./bin/server.js"
+    "nodemon": "nodemon ./bin/server.js"
   },
   "author": "Alexandre Nunes Reys",
   "license": "Apache-2.0",

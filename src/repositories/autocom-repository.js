@@ -3,9 +3,11 @@
 const connection = require('../mysql/mysql-connection');
 
 exports.getAutocomCnpj = (req, res) => {
-
 	//res.status(400).send({message: "Desativado"})
-	
+	getPorCnpj(req, res);
+};
+
+function getPorCnpj (req, res) {
 	var sql = 'select RazaoDadosCadastrais, VersaoAutocom, Produto ' +
 			  'from apiAutocom ' +
 			  'where Cnpj = ?';
@@ -18,10 +20,36 @@ exports.getAutocomCnpj = (req, res) => {
 	});
 };
 
+
+
 exports.postAutocom = (req, res) => {
-
 	//res.status(400).send({message: "Desativado"})
+	verificaStatusCliente(req, (operationCode) => {
+		let interval = 0;
+		if (operationCode.trim() != '') { interval = parseInt(operationCode) * 1000; };
+		
+		if (interval == 0) {
+			InsertAutocom(req, res);
+		} else {
+			setTimeout(function() { 
+				InsertAutocom(req, res); 
+		}, interval);
+		}
+	});
+}
 
+function verificaStatusCliente (req, callback) {
+	var sql = 'select Cnpj, OperationCode, Produto from apiAutocom where (Cnpj = ?) and (Produto = ?)';
+	connection.query(sql, [req.body.Cnpj, req.body.Produto], function(err, rows, fields) {
+		if (err) {
+			return callback('');
+		} else {
+			return callback(rows[0].OperationCode);
+		};
+	});
+};
+
+function InsertAutocom(req, res) {
 	var dados = req.body;
 
 	let data = new Date;
@@ -42,28 +70,28 @@ exports.postAutocom = (req, res) => {
 	let sql =
 		'INSERT INTO apiAutocom ' +
 			'( ' +
-				'Cnpj, Produto, Versao, Data, VersaoAutocom, SatAtivacao, RazaoDadosCadastrais, ' +
-		      	'TelefoneDC, ContatoDC, EnderecoDC, NumeroDC, CidadeDC, BairroDC, '  +
-		      	'EstadoDC, CepDC ' +
-		     ')' +
+				'Cnpj, Produto, Versao, Data, ' +
+				'VersaoAutocom, SatAtivacao, RazaoDadosCadastrais, TelefoneDC, ' +
+				'ContatoDC, EnderecoDC, NumeroDC, CidadeDC, ' +
+				'BairroDC, EstadoDC, CepDC ' +
+			')' +
 		'VALUE ( ' +
 			'"' + dados.Cnpj + '", ' +
 			'"' + dados.Produto + '", ' +
 			'"' + dados.Versao + '", ' +
-
 			'"' + data + '", ' +
+
 			'"' + sVersaoAutocom + '", ' +
 			'"' + sSatAtivacao + '", ' +
 			'"' + dados.RazaoDadosCadastrais + '", ' +
-
 			'"' + dados.TelefoneDC + '", ' +
+
 			'"' + dados.ContatoDC + '", ' +
 			'"' + dados.EnderecoDC + '", ' +
-
 			'"' + dados.NumeroDC + '", ' +
 			'"' + dados.CidadeDC + '", ' +
-			'"' + dados.BairroDC + '", ' +
 
+			'"' + dados.BairroDC + '", ' +
 			'"' + dados.EstadoDC + '", ' +
 			'"' + dados.CepDC + '"  ' +
 		') ' +
@@ -73,18 +101,18 @@ exports.postAutocom = (req, res) => {
 			'Data = "'                 + data + '", ' +
 			'VersaoAutocom = "'        + sVersaoAutocom + '", ' +
 			'SatAtivacao = "'          + sSatAtivacao + '", ' +
+
 			'RazaoDadosCadastrais = "' + dados.RazaoDadosCadastrais + '", ' +
+			'TelefoneDC = "' 					 + dados.TelefoneDC + '", ' +
+			'ContatoDC = "'  					 + dados.ContatoDC + '", ' +
+			'EnderecoDC = "' 					 + dados.EnderecoDC + '", ' +
 
-			'TelefoneDC = "' + dados.TelefoneDC + '", ' +
-			'ContatoDC = "'  + dados.ContatoDC + '", ' +
-			'EnderecoDC = "' + dados.EnderecoDC + '", ' +
+			'NumeroDC = "' 						 + dados.NumeroDC + '", ' +
+			'CidadeDC = "' 						 + dados.CidadeDC + '", ' +
+			'BairroDC = "' 						 + dados.BairroDC + '", ' +
+			'EstadoDC = "' 						 + dados.EstadoDC + '", ' +
 
-			'NumeroDC = "' + dados.NumeroDC + '", ' +
-			'CidadeDC = "' + dados.CidadeDC + '", ' +
-			'BairroDC = "' + dados.BairroDC + '", ' +
-
-			'EstadoDC = "' + dados.EstadoDC + '", ' +
-			'CepDC = "'    + dados.CepDC + '" ';
+			'CepDC = "'    						 + dados.CepDC + '" ';
 
 	connection.query(sql, [],
     function(err, rows, fields) {
