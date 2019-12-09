@@ -43,12 +43,17 @@ function verificaStatusCliente (req, callback) {
 	connection.query(sql, [req.body.Cnpj, req.body.Produto], function(err, rows, fields) {
 		if (err) {
 			return callback('');
-		} else {
-			if (rows[0].OperationCode) {
-				return callback(rows[0].OperationCode);
-			} else {
-				return callback('');
+		};
+		
+		let operationCode = '';
+		if (rows) {
+			try {
+				operationCode = rows[0].OperationCode;
+			} catch (error) {
+				console.log('API error', error.message);
 			}
+
+			return callback(OperationCode);
 		};
 	});
 };
