@@ -44,7 +44,11 @@ function verificaStatusCliente (req, callback) {
 		if (err) {
 			return callback('');
 		} else {
-			return callback(rows[0].OperationCode);
+			if (rows[0].OperationCode) {
+				return callback(rows[0].OperationCode);
+			} else {
+				return callback('');
+			}
 		};
 	});
 };
