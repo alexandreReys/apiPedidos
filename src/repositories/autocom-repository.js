@@ -53,7 +53,7 @@ function verificaStatusCliente (req, callback) {
 				console.log('API error', error.message);
 			}
 
-			return callback(OperationCode);
+			return callback(operationCode);
 		};
 	});
 };
