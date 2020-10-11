@@ -9,6 +9,8 @@ const port = normalizePort(
 	process.env.server_port || '3000'  // Variavel Ambiental
 );  
 
+console.log(process.env.NODE_ENV);
+
 app.set('port', port);
 
 const server = http.createServer(app);

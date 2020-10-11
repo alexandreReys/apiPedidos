@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 
 const connection = require('./mysql/mysql-connection');
 const nodemailer = require("nodemailer");
+const emailConfig = require('./config/emailConfig');
 
 //  carrega as rotas
 const indexRoute = require('./routes/index-routes');
@@ -23,18 +24,18 @@ app.use(cors());
 			app.post('/api/v1/mailAnrSiteContato', (req, res) => {
 				var dados = req.body;
 				var transporter = nodemailer.createTransport({
-					service: 'gmail',
+					service: emailConfig.email_site_service,
 					auth: {
-						user: 'anr.scs.495@gmail.com',
-						pass: 'q1@w2e3.r4'
+						user: emailConfig.email_site_user,
+						pass: emailConfig.email_site_pass,
 					},
 					tls: {
 						rejectUnauthorized: false
 					}
 				});
 				const mailOptions = {
-					from: 'anr.scs.495@gmail.com',        
-					to: 'anr.alexandre@gmail.com, alexandre@anrsistemas.com.br, pamela@anrsistemas.com.br',               
+					from: emailConfig.email_site_from,        
+					to: emailConfig.email_site_to, 
 					subject: dados.assunto, 	
 					html: dados.mensagem		
 				};

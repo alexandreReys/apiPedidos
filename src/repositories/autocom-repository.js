@@ -2,10 +2,9 @@
 
 const connection = require('../mysql/mysql-connection');
 
-
-
 exports.getAutocomCnpj = (req, res) => {
-	//res.status(400).send({message: "Desativado"})
+	// res.status(400).send({message: "Desativado"});
+
 	getPorCnpj(req, res);
 };
 
@@ -22,13 +21,21 @@ function getPorCnpj (req, res) {
 	});
 };
 
-
-
 exports.postAutocom = (req, res) => {
-	//res.status(400).send({message: "Desativado"})
+	// res.status(400).send({message: "Desativado"});
+	
+	console.log("postAutocom : ");
+
 	verificaStatusCliente(req, (operationCode) => {
+
+		console.log("operationCode : ", operationCode);
+
+
 		let interval = 0;
-		if (operationCode) { interval = parseInt(operationCode) * 1000; };
+		if (operationCode) { 
+			interval = parseInt(operationCode) * 1000; 
+			console.log("Interval : ", interval);
+		};
 		
 		if (interval == 0) {
 			InsertAutocom(req, res);
