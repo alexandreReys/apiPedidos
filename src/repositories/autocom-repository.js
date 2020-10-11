@@ -24,17 +24,13 @@ function getPorCnpj (req, res) {
 exports.postAutocom = (req, res) => {
 	// res.status(400).send({message: "Desativado"});
 	
-	console.log("postAutocom : ");
-
 	verificaStatusCliente(req, (operationCode) => {
-
-		console.log("operationCode : ", operationCode);
-
+		if (process.env.NODE_ENV === 'development') console.log("verificaStatusCliente.operationCode : ", operationCode);
 
 		let interval = 0;
 		if (operationCode) { 
 			interval = parseInt(operationCode) * 1000; 
-			console.log("Interval : ", interval);
+			if (process.env.NODE_ENV === 'development') console.log("verificaStatusCliente.Interval : ", interval);
 		};
 		
 		if (interval == 0) {
@@ -49,15 +45,17 @@ function verificaStatusCliente (req, callback) {
 	var sql = 'select Cnpj, OperationCode, Produto from apiAutocom where (Cnpj = ?) and (Produto = ?)';
 	connection.query(sql, [req.body.Cnpj, req.body.Produto], function(err, rows, fields) {
 		if (err) {
+			if (process.env.NODE_ENV === 'development') console.log("verificaStatusCliente.err");
 			return callback('');
 		};
 		
 		let operationCode = '';
 		if (rows) {
+			if (process.env.NODE_ENV === 'development') console.log("verificaStatusCliente.rows.true");
 			try {
 				operationCode = rows[0].OperationCode;
 			} catch (error) {
-				console.log('API error', error.message);
+				console.log('verificaStatusCliente.row(0).error', error.message);
 			}
 
 			return callback(operationCode);
