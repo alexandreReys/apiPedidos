@@ -14,7 +14,7 @@ function getPorCnpj (req, res) {
 			  'where Cnpj = ?';
 	connection.query(sql, [req.params.cnpj], function(err, rows, fields) {
 		if (err) {
-			res.status(400).json(err);
+			res.status(400).json(">>>>>>>> GETPORCNPJ", err);
 		} else {
 			res.status(200).json(rows);
 		};
@@ -25,12 +25,12 @@ exports.postAutocom = (req, res) => {
 	// res.status(400).send({message: "Desativado"});
 	
 	verificaStatusCliente(req, (operationCode) => {
-		if (process.env.NODE_ENV === 'development') console.log("verificaStatusCliente.operationCode : ", operationCode);
+		if (process.env.NODE_ENV === 'development') console.log("POST_AUTOCOM.VERIFICA_STATUS_CLIENTE.operationCode : ", operationCode);
 
 		let interval = 0;
 		if (operationCode) { 
 			interval = parseInt(operationCode) * 1000; 
-			if (process.env.NODE_ENV === 'development') console.log("verificaStatusCliente.Interval : ", interval);
+			if (process.env.NODE_ENV === 'development') console.log("POST_AUTOCOM.VERIFICA_STATUS_CLIENTE.interval : ", interval);
 		};
 		
 		if (interval == 0) {
@@ -45,17 +45,17 @@ function verificaStatusCliente (req, callback) {
 	var sql = 'select Cnpj, OperationCode, Produto from apiAutocom where (Cnpj = ?) and (Produto = ?)';
 	connection.query(sql, [req.body.Cnpj, req.body.Produto], function(err, rows, fields) {
 		if (err) {
-			if (process.env.NODE_ENV === 'development') console.log("verificaStatusCliente.err");
+			console.log(">>>>>>>> VERIFICA_STATUS_CLIENTE.ERR", err);
 			return callback('');
 		};
 		
 		let operationCode = '';
 		if (rows) {
-			if (process.env.NODE_ENV === 'development') console.log("verificaStatusCliente.rows.true");
+			if (process.env.NODE_ENV === 'development') console.log("VERIFICA_STATUS_CLIENTE.rows.true");
 			try {
 				operationCode = rows[0].OperationCode;
 			} catch (error) {
-				console.log('verificaStatusCliente.row(0).error', error.message);
+				console.log('>>>>>>>> VERIFICA_STATUS_CLIENTE.ROW(0).ERROR', error.message);
 			}
 
 			return callback(operationCode);
@@ -131,10 +131,11 @@ function InsertAutocom(req, res) {
 	connection.query(sql, [],
     function(err, rows, fields) {
 			if (err) {
-				res.status(400).json(err)
+				console.log(">>>>>>>> INSERT AUTOCOM.ERR", err);
+				res.status(400).json(err);
 			} else {
-				res.status(201).json(rows)
-			}
+				res.status(201).json(rows);
+			};
 		}
 	);
 };
