@@ -12,7 +12,11 @@ if (process.env.NODE_ENV === 'development') {
 exports.getAutocomCnpj = (req, res) => {
 	if (deactivated == "true") return res.status(400).send({ message: "Desativado" });
 
-	getPorCnpj();
+	try {
+		getPorCnpj();
+	} catch (error) {
+		console.error("[postAutocomAPI] ==> ", error);
+	};
 
 	function getPorCnpj() {
 		var sql = 'select RazaoDadosCadastrais, VersaoAutocom, Produto ' +
@@ -29,30 +33,6 @@ exports.getAutocomCnpj = (req, res) => {
 };
 
 exports.postAutocom = (req, res) => {
-	// console.log("[ENTROU] postAutocomAPI", req.body.Produto, req.body.Cnpj);
-
-	// const cnpjs = [
-	// 	"61091245000166",
-	// 	"64691173000186",
-	// 	"23874321000110",
-	// 	"24279439000163",
-	// 	"13918922000205",
-	// 	"24416840000106",
-	// 	"33330797000144",
-	// 	"24279439000163",
-	// 	"03594120000152",
-	// 	"11899471000108",
-	// 	"30189298000190",
-	// 	"03436647000310",
-	// ];
-
-	// if ( cnpjs.indexOf(req.body.Cnpj) > -1)  {
-	// 	console.log( `[JSON] ${req.body.Cnpj}` , req.body );
-
-	// 	const s = jsonVerify(req.body);
-	// 	console.log( `[JSON Verified] ${req.body.Cnpj}` , s);
-	// };
-
 	if (deactivated == "true") return res.status(400).send({ message: "Desativado" });
 	if (!validate()) return res.status(400).send({ message: "Campos Obrigatorios não preenchidos" });
 
@@ -117,6 +97,11 @@ exports.postAutocom = (req, res) => {
 		function InsertAutocom(req, res) {
 			var dados = jsonVerify(req.body);
 
+			if ( !dados ) {
+				console.error("[ERROR]  => " + "INVALID JSON", req.body);
+				return res.status(400).send({ message: "[ERROR]  => " + "INVALID JSON" });
+			};
+			
 			let data = new Date;
 			let dia = data.getDate();
 			let mes = data.getMonth() + 1;
@@ -164,9 +149,9 @@ exports.postAutocom = (req, res) => {
 				function (err, rows, fields) {
 					if (err) {
 						console.log(">>>>>>>> INSERT AUTOCOM.ERR", err);
-						res.status(400).send({ message: "" });
+						return res.status(400).send({ message: "" });
 					} else {
-						res.status(201).send({ message: "OK" });
+						return res.status(201).send({ message: "OK" });
 					};
 				}
 			);
@@ -178,6 +163,8 @@ exports.postAutocom = (req, res) => {
 function jsonVerify(p) {
 	// preserve newlines, etc - use valid JSON
 	var s = JSON.stringify(p);
+
+	if ( !IsValidJSONString(s) ) return null;
 
 	s = s.replace(/\\n/g, "\\n")
 		.replace(/\\'/g, "\\'")
@@ -194,3 +181,13 @@ function jsonVerify(p) {
 
 	return JSON.parse(s);
 };
+
+function IsValidJSONString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
