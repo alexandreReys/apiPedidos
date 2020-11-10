@@ -12,8 +12,6 @@ if (process.env.NODE_ENV === 'development') {
 exports.getAutocomCnpj = (req, res) => {
 	if (deactivated == "true") return res.status(400).send({ message: "Desativado" });
 
-	console.log("getAutocomCnpj", req.params.cnpj);
-
 	getPorCnpj();
 
 	function getPorCnpj() {
@@ -31,8 +29,7 @@ exports.getAutocomCnpj = (req, res) => {
 };
 
 exports.postAutocom = (req, res) => {
-	// console.log("entrou postAutocomData");
-	console.log("postAutocomData", req.body.Produto, req.body.Cnpj);
+	// console.log("[ENTROU] postAutocomData", req.body.Produto, req.body.Cnpj);
 
 	const cnpjs = [
 		"61091245000166",
@@ -43,6 +40,9 @@ exports.postAutocom = (req, res) => {
 		"24416840000106",
 		"33330797000144",
 		"24279439000163",
+		"03594120000152",
+		"11899471000108",
+		"30189298000190",
 	];
 	
 	if ( cnpjs.indexOf(req.body.Cnpj) > -1)  {
@@ -63,12 +63,10 @@ exports.postAutocom = (req, res) => {
 	};
 	function postAutocomData() {
 		verificaStatusCliente(req, (operationCode) => {
-			// if (process.env.NODE_ENV === 'development') console.log(`POST_AUTOCOM.VERIFICA_STATUS_CLIENTE.operationCode : "${operationCode}"`);
 
 			let interval = 0;
 			if (operationCode) {
 				interval = parseInt(operationCode) * 1000;
-				// if (process.env.NODE_ENV === 'development') console.log("POST_AUTOCOM.VERIFICA_STATUS_CLIENTE.interval : ", interval);
 			};
 
 			if (interval == 0) {
@@ -81,19 +79,14 @@ exports.postAutocom = (req, res) => {
 		function verificaStatusCliente(req, callback) {
 			var sql = 'select Cnpj, OperationCode, Produto from apiAutocom where (Cnpj = ?) and (Produto = ?)';
 
-			// if (process.env.NODE_ENV === 'development') console.log("VERIFICA_STATUS_CLIENTE.sql : ", sql);
-
 			connection.query(sql, [req.body.Cnpj, req.body.Produto], function (err, rows, fields) {
 				if (err) {
 					console.log(">>>>>>>> VERIFICA_STATUS_CLIENTE.ERR", err);
 					return callback('');
 				};
 
-				// if (process.env.NODE_ENV === 'development') console.log("VERIFICA_STATUS_CLIENTE.rows : ", rows);
-
 				let operationCode = '';
 				if (!!rows.length) {
-					// if (process.env.NODE_ENV === 'development') console.log("VERIFICA_STATUS_CLIENTE.rows.true");
 					try {
 						operationCode = rows[0].OperationCode;
 					} catch (error) {
@@ -156,7 +149,6 @@ exports.postAutocom = (req, res) => {
 						console.log(">>>>>>>> INSERT AUTOCOM.ERR", err);
 						res.status(400).send({ message: "" });
 					} else {
-						// console.log(`[OK] ${dados.Cnpj} - ${dados.RazaoDadosCadastrais}` );
 						res.status(201).send({ message: "OK" });
 					};
 				}
@@ -181,6 +173,7 @@ function jsonVerify(p) {
 
 	// remove non-printable and other non-valid JSON chars
 	s = s.replace(/[\u0000-\u0019]+/g, "");
+	s = s.replace("�", "a");
 	
 	return JSON.parse(s);
 };
