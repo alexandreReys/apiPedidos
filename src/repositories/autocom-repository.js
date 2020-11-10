@@ -153,6 +153,7 @@ exports.postAutocom = (req, res) => {
 						console.log(">>>>>>>> INSERT AUTOCOM.ERR", err);
 						res.status(400).json(err);
 					} else {
+						console.log(`[OK] ${dados.Cnpj} - ${dados.RazaoDadosCadastrais}` );
 						res.status(201).json(rows);
 					};
 				}
