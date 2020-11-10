@@ -31,11 +31,23 @@ exports.getAutocomCnpj = (req, res) => {
 };
 
 exports.postAutocom = (req, res) => {
-	console.log("entrou postAutocomData");
+	// console.log("entrou postAutocomData");
 	console.log("postAutocomData", req.body.Produto, req.body.Cnpj);
 
-	if ( req.body.Cnpj == "23874321000110" || req.body.Cnpj == "24279439000163") {
-		console.log("json 23874321000110", req.body);
+	const cnpjs = [
+		"61091245000166",
+		"64691173000186",
+		"23874321000110",
+		"24279439000163",
+		"13918922000205",
+		"24416840000106",
+		"33330797000144",
+		"24279439000163",
+	];
+	
+	if ( cnpjs.indexOf(req.body.Cnpj) > -1)  {
+		console.log( `[JSON] ${req.body.Cnpj}` , req.body );
+		console.log( `[JSON Verified] ${req.body.Cnpj}` , jsonVerify(req.body) );
 	};
 
 	if (deactivated == "true") return res.status(400).send({ message: "Desativado" });
@@ -51,12 +63,12 @@ exports.postAutocom = (req, res) => {
 	};
 	function postAutocomData() {
 		verificaStatusCliente(req, (operationCode) => {
-			if (process.env.NODE_ENV === 'development') console.log(`POST_AUTOCOM.VERIFICA_STATUS_CLIENTE.operationCode : "${operationCode}"`);
+			// if (process.env.NODE_ENV === 'development') console.log(`POST_AUTOCOM.VERIFICA_STATUS_CLIENTE.operationCode : "${operationCode}"`);
 
 			let interval = 0;
 			if (operationCode) {
 				interval = parseInt(operationCode) * 1000;
-				if (process.env.NODE_ENV === 'development') console.log("POST_AUTOCOM.VERIFICA_STATUS_CLIENTE.interval : ", interval);
+				// if (process.env.NODE_ENV === 'development') console.log("POST_AUTOCOM.VERIFICA_STATUS_CLIENTE.interval : ", interval);
 			};
 
 			if (interval == 0) {
@@ -69,7 +81,7 @@ exports.postAutocom = (req, res) => {
 		function verificaStatusCliente(req, callback) {
 			var sql = 'select Cnpj, OperationCode, Produto from apiAutocom where (Cnpj = ?) and (Produto = ?)';
 
-			if (process.env.NODE_ENV === 'development') console.log("VERIFICA_STATUS_CLIENTE.sql : ", sql);
+			// if (process.env.NODE_ENV === 'development') console.log("VERIFICA_STATUS_CLIENTE.sql : ", sql);
 
 			connection.query(sql, [req.body.Cnpj, req.body.Produto], function (err, rows, fields) {
 				if (err) {
@@ -77,11 +89,11 @@ exports.postAutocom = (req, res) => {
 					return callback('');
 				};
 
-				if (process.env.NODE_ENV === 'development') console.log("VERIFICA_STATUS_CLIENTE.rows : ", rows);
+				// if (process.env.NODE_ENV === 'development') console.log("VERIFICA_STATUS_CLIENTE.rows : ", rows);
 
 				let operationCode = '';
 				if (!!rows.length) {
-					if (process.env.NODE_ENV === 'development') console.log("VERIFICA_STATUS_CLIENTE.rows.true");
+					// if (process.env.NODE_ENV === 'development') console.log("VERIFICA_STATUS_CLIENTE.rows.true");
 					try {
 						operationCode = rows[0].OperationCode;
 					} catch (error) {
