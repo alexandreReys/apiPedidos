@@ -100,54 +100,35 @@ exports.postAutocom = (req, res) => {
 				sSatAtivacao = '';
 			}
 
+			let params = [
+				dados.Cnpj, dados.Produto, dados.Versao, data,
+				sVersaoAutocom, sSatAtivacao, dados.RazaoDadosCadastrais, dados.TelefoneDC, 
+				dados.ContatoDC, dados.EnderecoDC, dados.NumeroDC, dados.CidadeDC,
+				dados.BairroDC, dados.EstadoDC, dados.CepDC,
+
+				dados.Versao, data,	sVersaoAutocom, sSatAtivacao, 
+				dados.RazaoDadosCadastrais, dados.TelefoneDC, dados.ContatoDC, dados.EnderecoDC, 
+				dados.NumeroDC, dados.CidadeDC,	dados.BairroDC, dados.EstadoDC, 
+				dados.CepDC
+			];
+
 			let sql =
 				'INSERT INTO apiAutocom ' +
 				'( ' +
-				'Cnpj, Produto, Versao, Data, ' +
-				'VersaoAutocom, SatAtivacao, RazaoDadosCadastrais, TelefoneDC, ' +
-				'ContatoDC, EnderecoDC, NumeroDC, CidadeDC, ' +
-				'BairroDC, EstadoDC, CepDC ' +
+				    'Cnpj, Produto, Versao, Data, ' +
+				    'VersaoAutocom, SatAtivacao, RazaoDadosCadastrais, TelefoneDC, ' +
+				    'ContatoDC, EnderecoDC, NumeroDC, CidadeDC, ' +
+				    'BairroDC, EstadoDC, CepDC ' +
 				')' +
-				'VALUE ( ' +
-				'"' + dados.Cnpj + '", ' +
-				'"' + dados.Produto + '", ' +
-				'"' + dados.Versao + '", ' +
-				'"' + data + '", ' +
-
-				'"' + sVersaoAutocom + '", ' +
-				'"' + sSatAtivacao + '", ' +
-				'"' + dados.RazaoDadosCadastrais + '", ' +
-				'"' + dados.TelefoneDC + '", ' +
-
-				'"' + dados.ContatoDC + '", ' +
-				'"' + dados.EnderecoDC + '", ' +
-				'"' + dados.NumeroDC + '", ' +
-				'"' + dados.CidadeDC + '", ' +
-
-				'"' + dados.BairroDC + '", ' +
-				'"' + dados.EstadoDC + '", ' +
-				'"' + dados.CepDC + '"  ' +
-				') ' +
+				'VALUE ( ?, ?, ?, ?,  ?, ?, ?, ?,  ?, ?, ?, ?,  ?, ?, ?  ) ' +
 				'ON DUPLICATE KEY ' +
 				'UPDATE ' +
-				'Versao = "' + dados.Versao + '", ' +
-				'Data = "' + data + '", ' +
-				'VersaoAutocom = "' + sVersaoAutocom + '", ' +
-				'SatAtivacao = "' + sSatAtivacao + '", ' +
+				    'Versao = ?, Data = ?, VersaoAutocom = ?, SatAtivacao = ?, ' +
+					'RazaoDadosCadastrais = ?, TelefoneDC = ?, ContatoDC = ?, EnderecoDC = ?, ' +
+					'NumeroDC = ?, CidadeDC = ?, BairroDC = ?, EstadoDC = ?, ' +
+					'CepDC = ? ';
 
-				'RazaoDadosCadastrais = "' + dados.RazaoDadosCadastrais + '", ' +
-				'TelefoneDC = "' + dados.TelefoneDC + '", ' +
-				'ContatoDC = "' + dados.ContatoDC + '", ' +
-				'EnderecoDC = "' + dados.EnderecoDC + '", ' +
-
-				'NumeroDC = "' + dados.NumeroDC + '", ' +
-				'CidadeDC = "' + dados.CidadeDC + '", ' +
-				'BairroDC = "' + dados.BairroDC + '", ' +
-				'EstadoDC = "' + dados.EstadoDC + '", ' +
-
-				'CepDC = "' + dados.CepDC + '" ';
-
-			connection.query(sql, [],
+			connection.query(sql, params,
 				function (err, rows, fields) {
 					if (err) {
 						console.log(">>>>>>>> INSERT AUTOCOM.ERR", err);
