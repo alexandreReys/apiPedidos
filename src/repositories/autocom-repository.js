@@ -10,11 +10,7 @@ if (process.env.NODE_ENV === 'development') {
 };
 
 exports.getAutocomCnpj = (req, res) => {
-	console.log("deactivated", deactivated);
-
-	if (deactivated == "true") {
-		return res.status(400).send({ message: "Desativado" })
-	};
+	if (deactivated == "true") return res.status(400).send({ message: "Desativado" });
 
 	getPorCnpj();
 
