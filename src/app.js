@@ -20,15 +20,42 @@ app.use(cors());
 
 app.use(function (error, req, res, next) {
 	if (error instanceof SyntaxError) { //Handle SyntaxError here.
-		console.log("[SYNTAXERROR]  ==>  Invalid Request Data");
-		console.log(error.body);
+		// console.log("[SYNTAXERROR]  ==>  Invalid Request Data");
+		// console.log(error.body);
 		
-		return res.status(500).send({ 
-			syntaxError: "Invalid Data",
-			error,
-		});
+		// return res.status(500).send({ 
+		// 	syntaxError: "Invalid Data",
+		// 	error,
+		// });
+
+		var newReq = jsonVerify( req.body );
+
+		next( newReq, res );
+
+		function jsonVerify(p) {
+			// preserve newlines, etc - use valid JSON
+			var s = JSON.stringify(p);
+		
+			if ( !IsValidJSONString(s) ) return null;
+		
+			s = s.replace(/\\n/g, "\\n")
+				.replace(/\\'/g, "\\'")
+				.replace(/\\"/g, '\\"')
+				.replace(/\\&/g, "\\&")
+				.replace(/\\r/g, "\\r")
+				.replace(/\\t/g, "\\t")
+				.replace(/\\b/g, "\\b")
+				.replace(/\\f/g, "\\f");
+		
+			// remove non-printable and other non-valid JSON chars
+			s = s.replace(/[\u0000-\u0019]+/g, "");
+			s = s.replace("�", "a");
+		
+			return JSON.parse(s);
+		};
+		
 	} else {
-		next();
+		next(req, res);
 	}
 });
 
