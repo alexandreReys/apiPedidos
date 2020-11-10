@@ -2,7 +2,7 @@
 
 const connection = require('../mysql/mysql-connection');
 
-const deactivated = 
+var deactivated = 
 	process.env.NODE_ENV === 'development' 
 		? require('../../.env.json').deactivated 
 		: process.env.deactivated;
