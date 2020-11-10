@@ -2,10 +2,13 @@
 
 const connection = require('../mysql/mysql-connection');
 
-const deactivated = true;
+const deactivated = 
+	process.env.NODE_ENV === 'development' 
+		? require('../../.env.json').deactivated 
+		: process.env.deactivated;
 
 exports.getAutocomCnpj = (req, res) => {
-	if (deactivated) return res.status(400).send({ message: "Desativado" });
+	if ( deactivated ) return res.status(400).send({ message: "Desativado" });
 
 	getPorCnpj();
 
@@ -24,8 +27,8 @@ exports.getAutocomCnpj = (req, res) => {
 };
 
 exports.postAutocom = (req, res) => {
-	if (deactivated) return res.status(400).send({ message: "Desativado" });
-	if (!validate()) return res.status(400).send({ message: "Campos Obrigatorios não preenchidos" });
+	if ( deactivated ) return res.status(400).send({ message: "Desativado" });
+	if ( !validate() ) return res.status(400).send({ message: "Campos Obrigatorios não preenchidos" });
 
 	postAutocomData();
 	
