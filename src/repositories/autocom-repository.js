@@ -31,10 +31,15 @@ exports.getAutocomCnpj = (req, res) => {
 };
 
 exports.postAutocom = (req, res) => {
+	console.log("entrou postAutocomData");
+	console.log("postAutocomData", req.body.Produto, req.body.Cnpj);
+
+	if ( req.body.Cnpj == "23874321000110" || req.body.Cnpj == "24279439000163") {
+		console.log("json 23874321000110", req.body);
+	};
+
 	if (deactivated == "true") return res.status(400).send({ message: "Desativado" });
 	if (!validate()) return res.status(400).send({ message: "Campos Obrigatorios não preenchidos" });
-
-	console.log("postAutocomData", req.body.Cnpj);
 
 
 	postAutocomData();
