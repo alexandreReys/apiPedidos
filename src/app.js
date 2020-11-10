@@ -21,7 +21,7 @@ app.use(cors());
 app.use(function (error, req, res, next) {
 	if (error instanceof SyntaxError) { //Handle SyntaxError here.
 		console.log("[SYNTAXERROR]  ==>  Invalid Request Data");
-		console.log(error);
+		console.log(error.body);
 		
 		return res.status(500).send({ 
 			syntaxError: "Invalid Data",
