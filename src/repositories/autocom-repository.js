@@ -29,7 +29,7 @@ exports.getAutocomCnpj = (req, res) => {
 };
 
 exports.postAutocom = (req, res) => {
-	if (deactivated = "true") return res.status(400).send({ message: "Desativado" });
+	if (deactivated == "true") return res.status(400).send({ message: "Desativado" });
 	if (!validate()) return res.status(400).send({ message: "Campos Obrigatorios não preenchidos" });
 
 	postAutocomData();
