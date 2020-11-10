@@ -83,7 +83,26 @@ exports.postAutocom = (req, res) => {
 		};
 
 		function InsertAutocom(req, res) {
-			var dados = req.body;
+			function jsonVerify(p) {
+				// preserve newlines, etc - use valid JSON
+				var s = JSON.stringify(p);
+				
+				s = s.replace(/\\n/g, "\\n")
+					.replace(/\\'/g, "\\'")
+					.replace(/\\"/g, '\\"')
+					.replace(/\\&/g, "\\&")
+					.replace(/\\r/g, "\\r")
+					.replace(/\\t/g, "\\t")
+					.replace(/\\b/g, "\\b")
+					.replace(/\\f/g, "\\f");
+	
+				// remove non-printable and other non-valid JSON chars
+				s = s.replace(/[\u0000-\u0019]+/g, "");
+				
+				return JSON.parse(s);
+			};
+			
+			var dados = jsonVerify(req.body);
 
 			let data = new Date;
 			let dia = data.getDate();
@@ -102,31 +121,31 @@ exports.postAutocom = (req, res) => {
 
 			let params = [
 				dados.Cnpj, dados.Produto, dados.Versao, data,
-				sVersaoAutocom, sSatAtivacao, dados.RazaoDadosCadastrais, dados.TelefoneDC, 
+				sVersaoAutocom, sSatAtivacao, dados.RazaoDadosCadastrais, dados.TelefoneDC,
 				dados.ContatoDC, dados.EnderecoDC, dados.NumeroDC, dados.CidadeDC,
 				dados.BairroDC, dados.EstadoDC, dados.CepDC,
 
-				dados.Versao, data,	sVersaoAutocom, sSatAtivacao, 
-				dados.RazaoDadosCadastrais, dados.TelefoneDC, dados.ContatoDC, dados.EnderecoDC, 
-				dados.NumeroDC, dados.CidadeDC,	dados.BairroDC, dados.EstadoDC, 
+				dados.Versao, data, sVersaoAutocom, sSatAtivacao,
+				dados.RazaoDadosCadastrais, dados.TelefoneDC, dados.ContatoDC, dados.EnderecoDC,
+				dados.NumeroDC, dados.CidadeDC, dados.BairroDC, dados.EstadoDC,
 				dados.CepDC
 			];
 
 			let sql =
 				'INSERT INTO apiAutocom ' +
 				'( ' +
-				    'Cnpj, Produto, Versao, Data, ' +
-				    'VersaoAutocom, SatAtivacao, RazaoDadosCadastrais, TelefoneDC, ' +
-				    'ContatoDC, EnderecoDC, NumeroDC, CidadeDC, ' +
-				    'BairroDC, EstadoDC, CepDC ' +
+				'Cnpj, Produto, Versao, Data, ' +
+				'VersaoAutocom, SatAtivacao, RazaoDadosCadastrais, TelefoneDC, ' +
+				'ContatoDC, EnderecoDC, NumeroDC, CidadeDC, ' +
+				'BairroDC, EstadoDC, CepDC ' +
 				')' +
 				'VALUE ( ?, ?, ?, ?,  ?, ?, ?, ?,  ?, ?, ?, ?,  ?, ?, ?  ) ' +
 				'ON DUPLICATE KEY ' +
 				'UPDATE ' +
-				    'Versao = ?, Data = ?, VersaoAutocom = ?, SatAtivacao = ?, ' +
-					'RazaoDadosCadastrais = ?, TelefoneDC = ?, ContatoDC = ?, EnderecoDC = ?, ' +
-					'NumeroDC = ?, CidadeDC = ?, BairroDC = ?, EstadoDC = ?, ' +
-					'CepDC = ? ';
+				'Versao = ?, Data = ?, VersaoAutocom = ?, SatAtivacao = ?, ' +
+				'RazaoDadosCadastrais = ?, TelefoneDC = ?, ContatoDC = ?, EnderecoDC = ?, ' +
+				'NumeroDC = ?, CidadeDC = ?, BairroDC = ?, EstadoDC = ?, ' +
+				'CepDC = ? ';
 
 			connection.query(sql, params,
 				function (err, rows, fields) {
@@ -139,5 +158,6 @@ exports.postAutocom = (req, res) => {
 				}
 			);
 		};
+
 	};
 };
