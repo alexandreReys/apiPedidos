@@ -29,39 +29,45 @@ exports.getAutocomCnpj = (req, res) => {
 };
 
 exports.postAutocom = (req, res) => {
-	// console.log("[ENTROU] postAutocomData", req.body.Produto, req.body.Cnpj);
+	// console.log("[ENTROU] postAutocomAPI", req.body.Produto, req.body.Cnpj);
 
-	const cnpjs = [
-		"61091245000166",
-		"64691173000186",
-		"23874321000110",
-		"24279439000163",
-		"13918922000205",
-		"24416840000106",
-		"33330797000144",
-		"24279439000163",
-		"03594120000152",
-		"11899471000108",
-		"30189298000190",
-	];
+	// const cnpjs = [
+	// 	"61091245000166",
+	// 	"64691173000186",
+	// 	"23874321000110",
+	// 	"24279439000163",
+	// 	"13918922000205",
+	// 	"24416840000106",
+	// 	"33330797000144",
+	// 	"24279439000163",
+	// 	"03594120000152",
+	// 	"11899471000108",
+	// 	"30189298000190",
+	// 	"03436647000310",
+	// ];
 	
-	if ( cnpjs.indexOf(req.body.Cnpj) > -1)  {
-		console.log( `[JSON] ${req.body.Cnpj}` , req.body );
-		console.log( `[JSON Verified] ${req.body.Cnpj}` , jsonVerify(req.body) );
-	};
+	// if ( cnpjs.indexOf(req.body.Cnpj) > -1)  {
+	// 	console.log( `[JSON] ${req.body.Cnpj}` , req.body );
+		
+	// 	const s = jsonVerify(req.body);
+	// 	console.log( `[JSON Verified] ${req.body.Cnpj}` , s);
+	// };
 
 	if (deactivated == "true") return res.status(400).send({ message: "Desativado" });
 	if (!validate()) return res.status(400).send({ message: "Campos Obrigatorios não preenchidos" });
 
-
-	postAutocomData();
+	try {
+		postAutocomAPI();
+	} catch (error) {
+		console.error("[postAutocomAPI ==> " , error);
+	};
 
 	function validate() {
 		if (!req.body.Cnpj) return false;
 		if (!req.body.Produto) return false;
 		return true;
 	};
-	function postAutocomData() {
+	function postAutocomAPI() {
 		verificaStatusCliente(req, (operationCode) => {
 
 			let interval = 0;
