@@ -151,10 +151,10 @@ exports.postAutocom = (req, res) => {
 				function (err, rows, fields) {
 					if (err) {
 						console.log(">>>>>>>> INSERT AUTOCOM.ERR", err);
-						res.status(400).json(err);
+						res.status(400).send(err);
 					} else {
-						console.log(`[OK] ${dados.Cnpj} - ${dados.RazaoDadosCadastrais}` );
-						res.status(201).json(rows);
+						// console.log(`[OK] ${dados.Cnpj} - ${dados.RazaoDadosCadastrais}` );
+						res.status(201).send( jsonVerify(rows) );
 					};
 				}
 			);
