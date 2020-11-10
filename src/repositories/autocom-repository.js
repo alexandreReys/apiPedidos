@@ -8,7 +8,7 @@ const deactivated =
 		: process.env.deactivated;
 
 exports.getAutocomCnpj = (req, res) => {
-	if ( deactivated ) return res.status(400).send({ message: "Desativado" });
+	if ( deactivated = "true" ) return res.status(400).send({ message: "Desativado" });
 
 	getPorCnpj();
 
@@ -27,7 +27,7 @@ exports.getAutocomCnpj = (req, res) => {
 };
 
 exports.postAutocom = (req, res) => {
-	if ( deactivated ) return res.status(400).send({ message: "Desativado" });
+	if ( deactivated = "true" ) return res.status(400).send({ message: "Desativado" });
 	if ( !validate() ) return res.status(400).send({ message: "Campos Obrigatorios não preenchidos" });
 
 	postAutocomData();
