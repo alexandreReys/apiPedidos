@@ -20,9 +20,9 @@ exports.getAutocomCnpj = (req, res) => {
 			'where Cnpj = ?';
 		connection.query(sql, [req.params.cnpj], function (err, rows, fields) {
 			if (err) {
-				res.status(400).json(">>>>>>>> GETPORCNPJ", err);
+				res.status(400).send({ getByCnpj: "error" });
 			} else {
-				res.status(200).json(rows);
+				res.status(200).send( jsonVerify(rows) );
 			};
 		});
 	};
@@ -83,25 +83,6 @@ exports.postAutocom = (req, res) => {
 		};
 
 		function InsertAutocom(req, res) {
-			function jsonVerify(p) {
-				// preserve newlines, etc - use valid JSON
-				var s = JSON.stringify(p);
-				
-				s = s.replace(/\\n/g, "\\n")
-					.replace(/\\'/g, "\\'")
-					.replace(/\\"/g, '\\"')
-					.replace(/\\&/g, "\\&")
-					.replace(/\\r/g, "\\r")
-					.replace(/\\t/g, "\\t")
-					.replace(/\\b/g, "\\b")
-					.replace(/\\f/g, "\\f");
-	
-				// remove non-printable and other non-valid JSON chars
-				s = s.replace(/[\u0000-\u0019]+/g, "");
-				
-				return JSON.parse(s);
-			};
-			
 			var dados = jsonVerify(req.body);
 
 			let data = new Date;
@@ -151,14 +132,33 @@ exports.postAutocom = (req, res) => {
 				function (err, rows, fields) {
 					if (err) {
 						console.log(">>>>>>>> INSERT AUTOCOM.ERR", err);
-						res.status(400).send(err);
+						res.status(400).send({ message: "" });
 					} else {
 						// console.log(`[OK] ${dados.Cnpj} - ${dados.RazaoDadosCadastrais}` );
-						res.status(201).send( jsonVerify(rows) );
+						res.status(201).send({ message: "OK" });
 					};
 				}
 			);
 		};
 
 	};
+};
+
+function jsonVerify(p) {
+	// preserve newlines, etc - use valid JSON
+	var s = JSON.stringify(p);
+	
+	s = s.replace(/\\n/g, "\\n")
+		.replace(/\\'/g, "\\'")
+		.replace(/\\"/g, '\\"')
+		.replace(/\\&/g, "\\&")
+		.replace(/\\r/g, "\\r")
+		.replace(/\\t/g, "\\t")
+		.replace(/\\b/g, "\\b")
+		.replace(/\\f/g, "\\f");
+
+	// remove non-printable and other non-valid JSON chars
+	s = s.replace(/[\u0000-\u0019]+/g, "");
+	
+	return JSON.parse(s);
 };
