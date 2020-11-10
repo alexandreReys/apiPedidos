@@ -12,6 +12,8 @@ if (process.env.NODE_ENV === 'development') {
 exports.getAutocomCnpj = (req, res) => {
 	if (deactivated == "true") return res.status(400).send({ message: "Desativado" });
 
+	console.log("getAutocomCnpj", req.params.cnpj);
+
 	getPorCnpj();
 
 	function getPorCnpj() {
@@ -31,6 +33,9 @@ exports.getAutocomCnpj = (req, res) => {
 exports.postAutocom = (req, res) => {
 	if (deactivated == "true") return res.status(400).send({ message: "Desativado" });
 	if (!validate()) return res.status(400).send({ message: "Campos Obrigatorios não preenchidos" });
+
+	console.log("postAutocomData", req.body.Cnpj);
+
 
 	postAutocomData();
 
