@@ -22,7 +22,7 @@ exports.getAutocomCnpj = (req, res) => {
 			if (err) {
 				res.status(400).send({ getByCnpj: "error" });
 			} else {
-				res.status(200).send( jsonVerify(rows) );
+				res.status(200).send(jsonVerify(rows));
 			};
 		});
 	};
@@ -45,10 +45,10 @@ exports.postAutocom = (req, res) => {
 	// 	"30189298000190",
 	// 	"03436647000310",
 	// ];
-	
+
 	// if ( cnpjs.indexOf(req.body.Cnpj) > -1)  {
 	// 	console.log( `[JSON] ${req.body.Cnpj}` , req.body );
-		
+
 	// 	const s = jsonVerify(req.body);
 	// 	console.log( `[JSON Verified] ${req.body.Cnpj}` , s);
 	// };
@@ -59,7 +59,7 @@ exports.postAutocom = (req, res) => {
 	try {
 		postAutocomAPI();
 	} catch (error) {
-		console.error("[postAutocomAPI ==> " , error);
+		console.error("[postAutocomAPI] ==> ", error);
 	};
 
 	function validate() {
@@ -76,9 +76,20 @@ exports.postAutocom = (req, res) => {
 			};
 
 			if (interval == 0) {
-				InsertAutocom(req, res);
+				try {
+					InsertAutocom(req, res);
+				} catch (error) {
+					console.error("[InsertAutocom] ==> ", error);
+				}
+
 			} else {
-				setTimeout(function () { InsertAutocom(req, res); }, interval);
+				setTimeout(function () {
+					try {
+						InsertAutocom(req, res);
+					} catch (error) {
+						console.error("[InsertAutocom] ==> ", error);
+					}
+				}, interval);
 			}
 		});
 
@@ -167,7 +178,7 @@ exports.postAutocom = (req, res) => {
 function jsonVerify(p) {
 	// preserve newlines, etc - use valid JSON
 	var s = JSON.stringify(p);
-	
+
 	s = s.replace(/\\n/g, "\\n")
 		.replace(/\\'/g, "\\'")
 		.replace(/\\"/g, '\\"')
@@ -180,6 +191,6 @@ function jsonVerify(p) {
 	// remove non-printable and other non-valid JSON chars
 	s = s.replace(/[\u0000-\u0019]+/g, "");
 	s = s.replace("�", "a");
-	
+
 	return JSON.parse(s);
 };
