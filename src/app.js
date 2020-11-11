@@ -20,9 +20,11 @@ app.use(cors());
 
 app.use(function (error, req, res, next) {
 	if (error instanceof SyntaxError) { //Handle SyntaxError here.
-		let newBody = jsonVerify( req.body );
-		req = { ...req, body: newBody };
-		next( req, res);
+		// let newBody = jsonVerify( req.body );
+		// req = { ...req, body: newBody };
+		// next( req, res);
+		res.status(400).send({ error: "sintax error on json request" });
+		console.log("[SYNTAX ERRO ON JSON REQUEST]");
 	} else {
 		next();
 	};
