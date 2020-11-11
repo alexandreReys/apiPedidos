@@ -20,20 +20,11 @@ app.use(cors());
 
 app.use(function (error, req, res, next) {
 	if (error instanceof SyntaxError) { //Handle SyntaxError here.
-		// console.log("[SYNTAXERROR]  ==>  Invalid Request Data");
-		// console.log(error.body);
-		
-		// return res.status(500).send({ 
-		// 	syntaxError: "Invalid Data",
-		// 	error,
-		// });
-
-		var newReq = jsonVerify( req.body );
-
-		next(newReq, res);
+		let newBody = jsonVerify( req.body );
+		let newReq = { ...req, body: newBody };
+		next( newReq, res);
 	} else {
-		var newReq = jsonVerify( req.body );
-		next(newReq, res);
+		next();
 	};
 
 	function jsonVerify(p) {
@@ -354,7 +345,6 @@ app.get('/api/v1/vistoriasdatas', (req, res) => {
 	connection.query(sql, [req.params.data],
 		function (err, rows, fields) {
 			if (err) throw err;
-			// console.log(rows);
 			res.json(rows)
 		}
 	);

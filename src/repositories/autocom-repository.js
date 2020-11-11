@@ -15,7 +15,7 @@ exports.getAutocomCnpj = (req, res) => {
 	try {
 		getPorCnpj();
 	} catch (error) {
-		console.error("[postAutocomAPI] ==> ", error);
+		console.error("[ERROR - postAutocomAPI] ==> getPorCnpj", error);
 	};
 
 	function getPorCnpj() {
@@ -39,7 +39,7 @@ exports.postAutocom = (req, res) => {
 	try {
 		postAutocomAPI();
 	} catch (error) {
-		console.error("[postAutocomAPI] ==> ", error);
+		console.error("[ERROR - postAutocomAPI] ==> ", error);
 	};
 
 	function validate() {
@@ -59,7 +59,7 @@ exports.postAutocom = (req, res) => {
 				try {
 					InsertAutocom(req, res);
 				} catch (error) {
-					console.error("[InsertAutocom] ==> ", error);
+					console.error("[ERROR - InsertAutocom] ==> ", error);
 				}
 
 			} else {
@@ -78,7 +78,7 @@ exports.postAutocom = (req, res) => {
 
 			connection.query(sql, [req.body.Cnpj, req.body.Produto], function (err, rows, fields) {
 				if (err) {
-					console.log(">>>>>>>> VERIFICA_STATUS_CLIENTE.ERR", err);
+					console.log("[ERROR QUERY - verificaStatusCliente] ==> ", err);
 					return callback('');
 				};
 
@@ -87,7 +87,7 @@ exports.postAutocom = (req, res) => {
 					try {
 						operationCode = rows[0].OperationCode;
 					} catch (error) {
-						console.log('>>>>>>>> VERIFICA_STATUS_CLIENTE.ROW(0).ERROR', error.message);
+						console.log("[ERROR ROWS[0] - verificaStatusCliente] ==> ", error.message);
 					};
 				};
 				return callback(operationCode);
@@ -98,7 +98,7 @@ exports.postAutocom = (req, res) => {
 			var dados = jsonVerify(req.body);
 
 			if ( !dados ) {
-				console.error("[ERROR]  => " + "INVALID JSON", req.body);
+				console.error("[ERROR - InsertAutocom]  => " + "INVALID JSON", req.body);
 				return res.status(400).send({ message: "[ERROR]  => " + "INVALID JSON" });
 			};
 			
@@ -148,7 +148,7 @@ exports.postAutocom = (req, res) => {
 			connection.query(sql, params,
 				function (err, rows, fields) {
 					if (err) {
-						console.log(">>>>>>>> INSERT AUTOCOM.ERR", err);
+						console.log("[ERROR - InsertAutocom]  => QUERY", err);
 						return res.status(400).send({ message: "" });
 					} else {
 						return res.status(201).send({ message: "OK" });
