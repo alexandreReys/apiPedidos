@@ -30,35 +30,32 @@ app.use(function (error, req, res, next) {
 
 		var newReq = jsonVerify( req.body );
 
-		next( newReq, res );
-
-		function jsonVerify(p) {
-			// preserve newlines, etc - use valid JSON
-			var s = JSON.stringify(p);
-		
-			if ( !IsValidJSONString(s) ) return null;
-		
-			s = s.replace(/\\n/g, "\\n")
-				.replace(/\\'/g, "\\'")
-				.replace(/\\"/g, '\\"')
-				.replace(/\\&/g, "\\&")
-				.replace(/\\r/g, "\\r")
-				.replace(/\\t/g, "\\t")
-				.replace(/\\b/g, "\\b")
-				.replace(/\\f/g, "\\f");
-		
-			// remove non-printable and other non-valid JSON chars
-			s = s.replace(/[\u0000-\u0019]+/g, "");
-			s = s.replace("�", "a");
-		
-			return JSON.parse(s);
-		};
-		
+		next(newReq, res);
 	} else {
-		next(req, res);
-	}
-});
+		var newReq = jsonVerify( req.body );
+		next(newReq, res);
+	};
 
+	function jsonVerify(p) {
+		// preserve newlines, etc - use valid JSON
+		var s = JSON.stringify(p);
+	
+		s = s.replace(/\\n/g, "\\n")
+			.replace(/\\'/g, "\\'")
+			.replace(/\\"/g, '\\"')
+			.replace(/\\&/g, "\\&")
+			.replace(/\\r/g, "\\r")
+			.replace(/\\t/g, "\\t")
+			.replace(/\\b/g, "\\b")
+			.replace(/\\f/g, "\\f");
+	
+		// remove non-printable and other non-valid JSON chars
+		s = s.replace(/[\u0000-\u0019]+/g, "");
+		s = s.replace("�", "a");
+	
+		return JSON.parse(s);
+	};
+});
 
 //////////////////////////////////////////////////////////////////////////////////////////
 //  Envio de E-Mail com NodeMailer
