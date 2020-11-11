@@ -21,8 +21,8 @@ app.use(cors());
 app.use(function (error, req, res, next) {
 	if (error instanceof SyntaxError) { //Handle SyntaxError here.
 		let newBody = jsonVerify( req.body );
-		let newReq = { ...req, body: newBody };
-		next( newReq, res);
+		req = { ...req, body: newBody };
+		next( req, res);
 	} else {
 		next();
 	};
